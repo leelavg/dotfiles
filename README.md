@@ -22,8 +22,12 @@ chmod +x setup.sh
 ./setup.sh 1 1
 ```
 
-Existing files in your system will be backed to your home directory as `dotfile_bakup-<TIMESTAMP>.tar.gz`
+Existing config files/directories in your system will be backed to your home directory as `dotfile_bakup-<TIMESTAMP>.tar.gz`
 STDOUT and STDERR are logged in current directory as `setup_<TIMESTAMP>.log`
+
+Following files/directories will be backed up:
+- .vimrc, .bashrc, .profile, .tmux.conf
+- .vim
 
 Tasks
 -----
