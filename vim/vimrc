@@ -1,0 +1,4 @@
+" Load Vim Config
+if filereadable(expand('~/.vim/config.vim'))
+    source ~/.vim/config.vim
+end
