@@ -1,0 +1,12 @@
+# Make 'rconsole', 'perltidy', 'natelint' discoverable
+
+pathappend() {
+  for ARG in "$@"
+  do
+    if [[ -d "$ARG" && ":$PATH:" != *":$ARG:"* ]]; then
+        PATH="${PATH:+"$PATH:"}$ARG"
+    fi
+  done
+}
+
+pathappend /usr/software/utils/bin /usr/software/bin /usr/software/test/noarch/dev/nate/bin

@@ -1,0 +1,3 @@
+# Make bash as default shell
+setenv SHELL /bin/bash
+exec /bin/bash --login
