@@ -33,9 +33,5 @@ Tasks
 -----
 - [x] Create configs (bash, vim, tmux)
 - [x] Create an installation script
-- [ ] Test the installation
+- [x] Test the installation
 - [ ] Optimize/re-write/change configs, installation script when need araises
-
-Note
-----
-The installation script as a whole isn't run as of this posting, this dotfiles repo will be updated as and when required or any GitHub issue is raised.
