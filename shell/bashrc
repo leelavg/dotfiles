@@ -2,7 +2,7 @@
 source ~/.profile
 
 #====== All about bash history
-export HISTCONTROL=ignoreboth:ignorespace:erasedups
+export HISTCONTROL=ignoreboth:erasedups
 export HISTSIZE=10000
 export HISTFILESIZE=20000
 shopt -s histappend
@@ -30,11 +30,11 @@ done
 #-- General
 alias l='ls -l'
 alias la='ls -Al'
-alias vim='nvim'
+alias vim='$(if type nvim &> /dev/null; then echo nvim; else echo vim; fi)'
 alias ..='cd ..'
 alias tree='tree -C'
 alias trls='tree -C | less -R'
-alias tmux="TERM=screen-256color-bce tmux"
+alias tmux="TERM=screen-256color tmux"
 alias refresh='source ~/.bashrc'
 alias c='clear'
 
