@@ -1,5 +1,5 @@
 " Leader commands
-let mapleader="\<Space>"
+map <space> <leader>
 
 " General
 map <leader>so :source $MYVIMRC<cr>
