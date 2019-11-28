@@ -1,5 +1,7 @@
 #====== Source any other Run Commands
+set -m
 source ~/.profile
+source ~/.bash_aliases
 
 #====== All about bash history
 export HISTCONTROL=ignoreboth:erasedups
@@ -26,23 +28,7 @@ do
     fi
 done
 
-#====== Aliases
-#-- General
-alias l='ls -l'
-alias la='ls -Al'
-alias vim='$(if type nvim &> /dev/null; then echo nvim; else echo vim; fi)'
-alias ..='cd ..'
-alias tree='tree -C'
-alias trls='tree -C | less -R'
-alias tmux="TERM=screen-256color tmux"
-alias refresh='source ~/.bashrc'
-alias c='clear'
-
-#-- Project Related
-alias perltidy='perltidy-5.24.0'
-alias plt="perltidy -l=140 -ce -i=4 -b -ci=4 -vt=2 -cti=0 -pt=1 -bt=1 -sbt=1 -bbt=1 -nsfs -nolq -wbb='% + - * / x != == >= <= =~ !~ < > | & >= < = **= += *= &= <<= &&= -= /= |= >>= ||= .= %= ^= x=' -ole=unix $1"
-alias ntl="natelint $1"
-
 #====== Prompt
 #-- Simple
+export PROMPT_DIRTRIM=1
 export PS1='$(if [[ $? == 0 ]]; then echo "\e[1;32m:)"; else echo "\e[1;31m:("; fi)\e[1;34m \w > \e[m'

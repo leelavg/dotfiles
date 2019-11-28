@@ -70,7 +70,7 @@ if [[ -n $2 && $2 == 1 ]]; then
     mkdir -pv $ABSOLUTE_PATH/dot_bkp
 
     # Shell
-    for rc_file in profile cshrc bashrc
+    for rc_file in profile cshrc bashrc bash_profile bash_aliases
     do
         [ -f $HOME/.$rc_file ] && mv -fv $HOME/.$rc_file $ABSOLUTE_PATH/dot_bkp/$rc_file
         ln -sfv $ABSOLUTE_PATH/shell/$rc_file $HOME/.$rc_file
@@ -98,6 +98,7 @@ if [[ -n $2 && $2 == 1 ]]; then
             ln -sfv $ABSOLUTE_PATH/vim/$file $HOME/.$file
         elif [[ $file =~ init ]]; then
             [ -d $HOME/.config/nvim ] && mv -fv $HOME/.config/nvim $ABSOLUTE_PATH/dot_bkp/nvim
+            [ -z $HOME/.config/nvim ] && mkdir -p $HOME/.config/nvim
             [ -d $HOME/.config/nvim ] && ln -sfv $ABSOLUTE_PATH/vim/$file $HOME/.config/nvim/
         elif [[ $file =~ config ]]; then
             ln -sfv $ABSOLUTE_PATH/vim/$file $HOME/.vim/
@@ -110,8 +111,8 @@ if [[ -n $2 && $2 == 1 ]]; then
     [ -f $HOME/.tmux.conf ] && mv -fv $HOME/.tmux.conf $ABSOLUTE_PATH/dot_bkp/
     ln -sfv $ABSOLUTE_PATH/tmux/tmux.conf $HOME/.tmux.conf
 
-    FILENAME=dotfile_bakup-$TIME.tar.gz
-    tar -cpzf $FILENAME dot_bkp
+    FILENAME=dotfile_backup-$TIME.tar.gz
+    tar -cpzfv $FILENAME dot_bkp
     rm -rf dot_bkp
 
 fi

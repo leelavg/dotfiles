@@ -1,6 +1,9 @@
 " Leader commands
 map <space> <leader>
 
+" For Bash Aliases
+let $BASH_ENV="~/.bash_aliases"
+
 " General
 map <leader>so :source $MYVIMRC<cr>
 map <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>   " Pre-populate a split command with the current directory
