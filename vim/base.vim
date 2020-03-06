@@ -37,6 +37,7 @@ set smartindent
 set smarttab
 set ruler
 
+" Misc
 filetype plugin indent on           " allows auto-indenting depending on file type
 syntax on                           " syntax highlighting
 

@@ -6,13 +6,11 @@ let $BASH_ENV="~/.bash_aliases"
 
 " General
 map <leader>so :source $MYVIMRC<cr>
-map <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>   " Pre-populate a split command with the current directory
+map <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
 map <leader>cv <C-v>
 map <leader>co ggVG*y   " Copy the entire buffer into the system register
 map <leader>l :set cursorline!<CR>
 
 " Project specific
-map <leader>p :!plt %<CR>
-map <leader>n :!ntl %<CR>
-map <leader>w :w! ~/temp/lines<CR>
-map <leader>r :r ~/temp/lines<CR>
+map <leader>w :w! /tmp/lines<CR>
+map <leader>r :r /tmp/lines<CR>
