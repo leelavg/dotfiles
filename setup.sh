@@ -37,7 +37,7 @@ if [[ -n $2 && $2 == 1 ]]; then
     # Vim
     [ -d $HOME/.vim ] && mv -fv $HOME/.vim $ABSOLUTE_PATH/dot_bkp/vim
     [ -f $HOME/.vimrc ] && mv -fv $HOME/.vimrc $ABSOLUTE_PATH/dot_bkp/vimrc
-    [ -f $HOME/.vimrc ] && mv -fv $HOME/.config/nvim/init $ABSOLUTE_PATH/dot_bkp/init
+    [ -f $HOME/.config/nvim/init ] && mv -fv $HOME/.config/nvim/init $ABSOLUTE_PATH/dot_bkp/init
     rm -rfv $HOME/.vim*
     mkdir -pv $HOME/.vim/pack/minpac/opt/minpac
     mkdir -pv $HOME/.vim/configs
@@ -66,7 +66,7 @@ if [[ -n $2 && $2 == 1 ]]; then
     ln -sfv $ABSOLUTE_PATH/tmux/tmux.conf $HOME/.tmux.conf
 
     FILENAME=dotfile_backup-$TIME.tar.gz
-    tar -cpzfv $FILENAME dot_bkp
+    tar -cpzvf $FILENAME dot_bkp
     rm -rf dot_bkp
 
 fi

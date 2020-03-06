@@ -5,7 +5,7 @@ map <space> <leader>
 let $BASH_ENV="~/.bash_aliases"
 
 " General
-map <leader>so :source $MYVIMRC<cr>
+map <leader>so :source ~/.config/nvim/init.vim<cr>
 map <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
 map <leader>cv <C-v>
 map <leader>co ggVG*y   " Copy the entire buffer into the system register

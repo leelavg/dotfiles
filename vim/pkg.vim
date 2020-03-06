@@ -12,6 +12,6 @@ call minpac#add('machakann/vim-highlightedyank')
 
 call minpac#add('k-takata/minpac', {'type':'opt'})
 
-" minpac commands:
+" minpac commands
 command! PackUpdate call minpac#update()
 command! PackClean  call minpac#clean()
