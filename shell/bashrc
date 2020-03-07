@@ -47,5 +47,5 @@ done
 
 #====== Prompt
 #-- Simple
-export PROMPT_DIRTRIM=1
-export PS1='$(if [[ $? == 0 ]]; then echo "\e[1;32m:)"; else echo "\e[1;31m:("; fi)\e[1;34m \w > \e[m'
+PROMPT_DIRTRIM=2
+PS1='$(if [[ $? == 0 ]]; then echo "\e[1;32m:)"; else echo "\e[1;31m:("; fi)\e[1;34m \w > \e[m'
