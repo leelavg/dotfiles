@@ -65,6 +65,18 @@ if [[ -n $2 && $2 == 1 ]]; then
     [ -f $HOME/.tmux.conf ] && mv -fv $HOME/.tmux.conf $ABSOLUTE_PATH/dot_bkp/
     ln -sfv $ABSOLUTE_PATH/tmux/tmux.conf $HOME/.tmux.conf
 
+    # Ansible
+    [ -f $HOME/.ansible] && mv -fv $HOME/.ansible $ABSOLUTE_PATH/dot_bkp/
+    ln -sfv $ABSOLUTE_PATH/adhoc/ansible.cfg $HOME/.ansible.cfg
+
+    # Remote SSH rc (https://github.com/fsquillace/kyrat)
+    if [ -d $HOME/.config/kyrat ]; then
+        mv -fv $HOME/.config/kyrat $ABSOLUTE_PATH/dot_bkp/
+    else
+        git clone https://github.com/fsquillace/kyrat $HOME/.local/share/kyrat
+    fi
+    ln -sfv $ABSOLUTE_PATH/shell/kyrat $HOME/.config/
+
     FILENAME=dotfile_backup-$TIME.tar.gz
     tar -cpzvf $FILENAME dot_bkp
     rm -rf dot_bkp
