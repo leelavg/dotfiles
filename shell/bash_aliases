@@ -10,5 +10,6 @@ alias trls='tree -C | less -R'
 alias re='source ~/.bashrc'
 alias h='hostname'
 alias p='pwd;pwd -P'
+alias ks='kyrat'
 
 #-- Project Related

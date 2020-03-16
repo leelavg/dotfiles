@@ -48,4 +48,7 @@ done
 #====== Prompt
 #-- Simple
 PROMPT_DIRTRIM=2
-PS1='$(if [[ $? == 0 ]]; then echo "\e[1;32m:)"; else echo "\e[1;31m:("; fi)\e[1;34m \w > \e[m'
+PS1="\e[1;31m\w \e[m\e[1;37m\$ \e[m"
+
+#====== Exports
+export PATH=$PATH:~/.local/share/kyrat/bin
