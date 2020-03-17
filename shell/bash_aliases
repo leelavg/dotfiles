@@ -11,5 +11,6 @@ alias re='source ~/.bashrc'
 alias h='hostname'
 alias p='pwd;pwd -P'
 alias ks='kyrat'
+alias vm='cat /etc/hosts | grep $1 --color=never'
 
 #-- Project Related
