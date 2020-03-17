@@ -1,3 +1,6 @@
+#====== Globals
+cwd=$(dirname "$BASH_SOURCE[0]}")
+
 #====== Aliases
 #-- General
 shopt -s expand_aliases
@@ -8,6 +11,8 @@ alias tree='tree -C'
 alias trls='tree -C | less -R'
 alias h='hostname'
 alias p='pwd;pwd -P'
+alias re="source $cwd/bashrc"
+alias vm="cat $cwd/etc_hosts | grep $1 --color=never"
 
 #====== All about bash history
 export HISTCONTROL=ignoreboth:erasedups
@@ -37,6 +42,6 @@ done
 
 #======= Prompt
 #--- Simple
-PROMPT_DIRTRIM=2
-etc_host=$(grep $(hostname -i) $(dirname "${BASH_SOURCE[0]}")/etc_hosts | cut -d ' ' -f 2)
-PS1="\e[1;36m\u\e[m@\e[1;31m$(hostname -i)\e[m\e[1;34m $etc_host\e[m \e[1;32m\w\e[m \e[1;37m\$ \e[m"
+# PROMPT_DIRTRIM=3
+etc_host=$(grep $(hostname -i) $cwd/etc_hosts | cut -d ' ' -f 2)
+PS1="\n\e[1;36m\u\e[m@\e[1;31m$(hostname -i)\e[m \e[1;34m$etc_host\e[m \e[1;32m\w\e[m $PS2 \n\e[1;37m\$ \e[m"
