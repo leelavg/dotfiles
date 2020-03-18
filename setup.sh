@@ -18,7 +18,7 @@ echo "BEGIN ${SCRIPT_NAME%.sh}"
 # Installing required Binaries
 if [[ -n $1 && $1 == 1 ]]; then
 
-    sudo dnf -y install vim neovim tmux sshpass markdown lynx ansible
+    sudo dnf -y install vim neovim tmux sshpass  lynx ansible
 
 fi
 
