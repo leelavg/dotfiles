@@ -70,11 +70,7 @@ if [[ -n $2 && $2 == 1 ]]; then
     ln -sfv $ABSOLUTE_PATH/adhoc/ansible.cfg $HOME/.ansible.cfg
 
     # Remote SSH rc (https://github.com/fsquillace/kyrat - original)
-    if [ -d $HOME/.config/kyrat ]; then
-        mv -fv $HOME/.config/kyrat $ABSOLUTE_PATH/dot_bkp/
-    else
-        git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat
-    fi
+    [ -d $HOME/.config/kyrat ] && mv -fv $HOME/.config/kyrat $ABSOLUTE_PATH/dot_bkp/
     ln -sfv $ABSOLUTE_PATH/shell/kyrat $HOME/.config/
 
     FILENAME=dotfile_backup-$TIME.tar.gz
