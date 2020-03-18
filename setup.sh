@@ -18,7 +18,7 @@ echo "BEGIN ${SCRIPT_NAME%.sh}"
 # Installing required Binaries
 if [[ -n $1 && $1 == 1 ]]; then
 
-    sudo dnf -y install vim neovim tmux sshpass markdown lynx
+    sudo dnf -y install vim neovim tmux sshpass markdown lynx ansible
 
 fi
 
@@ -69,11 +69,11 @@ if [[ -n $2 && $2 == 1 ]]; then
     [ -f $HOME/.ansible] && mv -fv $HOME/.ansible $ABSOLUTE_PATH/dot_bkp/
     ln -sfv $ABSOLUTE_PATH/adhoc/ansible.cfg $HOME/.ansible.cfg
 
-    # Remote SSH rc (https://github.com/fsquillace/kyrat)
+    # Remote SSH rc (https://github.com/fsquillace/kyrat - original)
     if [ -d $HOME/.config/kyrat ]; then
         mv -fv $HOME/.config/kyrat $ABSOLUTE_PATH/dot_bkp/
     else
-        git clone https://github.com/fsquillace/kyrat $HOME/.local/share/kyrat
+        git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat
     fi
     ln -sfv $ABSOLUTE_PATH/shell/kyrat $HOME/.config/
 
