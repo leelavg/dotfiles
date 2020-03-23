@@ -4,6 +4,7 @@ cwd=$(dirname "$BASH_SOURCE[0]}")
 #====== Aliases
 #-- General
 shopt -s expand_aliases
+shopt -s checkwinsize
 alias l='ls -l'
 alias ll='ls -Al'
 alias ..='cd ..'
@@ -43,4 +44,9 @@ done
 #======= Prompt
 #--- Simple
 etc_host=$(grep -P "$(hostname -i)\b" $cwd/etc_hosts | tr -s ' ' |cut -d ' ' -f 2)
-PS1="\n\e[1;36m\u\e[m@\e[1;31m$(hostname -i)\e[m \e[1;34m$etc_host\e[m \e[1;32m\w\e[m $PS2 \n\e[1;37m\$ \e[m"
+prompt='\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]$(hostname -i)
+              \[$(tput bold)$(tput setaf 4)\]$etc_host
+              \[$(tput bold)$(tput setaf 2)\]\w $PS2
+              \[$(tput bold)$(tput setaf 7)\]\n$
+              \[$(tput sgr0)\]'
+    PS1=$(echo $prompt | tr -s ' ')

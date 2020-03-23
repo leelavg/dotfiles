@@ -1,8 +1,10 @@
 #====== Aliases
 #-- General
 shopt -s expand_aliases
+shopt -s checkwinsize
 alias l='ls -l'
 alias ll='ls -Al'
+alias vi='vim'
 alias vim='$(if type nvim &> /dev/null; then echo nvim; else echo vim; fi)'
 alias ..='cd ..'
 alias tree='tree -C'
@@ -17,6 +19,7 @@ alias gl='git lg'
 alias ga='git add'
 alias gc='git commit -m'
 alias sm='f(){ markdown $1 | lynx -stdin;}; f'
+alias td='tmux attach -d'
 
 
 #-- Project Related

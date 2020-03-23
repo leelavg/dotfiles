@@ -9,6 +9,7 @@ map <leader>so :source ~/.config/nvim/init.vim<cr>
 map <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
 map <leader>co ggVG*y   " Copy the entire buffer into the system register
 map <leader>l :set cursorline!<CR>
+map <leader>p :set paste!<CR>
 
 " Project specific
 map <leader>w :w! /tmp/lines<CR>

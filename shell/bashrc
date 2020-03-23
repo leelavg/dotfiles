@@ -45,16 +45,21 @@ do
     fi
 done
 
-#====== Prompt
+#====== Prompt [https://linux.101hacks.com/ps1-examples/prompt-color-using-tput/]
 #-- Simple
-if grep -P "$(hostname -i)\b" /etc/hosts; then
+if grep -P "$(hostname -i)\b" /etc/hosts > /dev/null; then
     #-- Remote
     etc_host=$(grep -P "$(hostname -i)\b" /etc/hosts | tr -s ' ' |cut -d ' ' -f 2)
-    PS1="\n\e[1;36m\u\e[m@\e[1;31m$(hostname -i)\e[m \e[1;34m$etc_host\e[m \e[1;32m\w\e[m $PS2 \n\e[1;37m\$ \e[m"
+    prompt='\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]$(hostname -i)
+              \[$(tput bold)$(tput setaf 4)\]$etc_host
+              \[$(tput bold)$(tput setaf 2)\]\w $PS2
+              \[$(tput bold)$(tput setaf 7)\]\n$
+              \[$(tput sgr0)\]'
+    PS1=$(echo $prompt | tr -s ' ')
 else
     #-- Local
     PROMPT_DIRTRIM=2
-    PS1="\e[1;31m\w \e[m\e[1;37m\$ \e[m"
+    PS1="\[$(tput bold)$(tput setaf 1)\]\w \[$(tput bold)$(tput setaf 7)\]$ \[$(tput sgr0)\]"
 fi
 
 #====== Exports

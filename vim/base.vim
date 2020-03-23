@@ -59,3 +59,4 @@ command! E e
 if has('nvim')
    set inccommand=split         " Searches in a split window
 endif
+
