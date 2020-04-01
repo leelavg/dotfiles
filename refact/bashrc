@@ -1,0 +1,66 @@
+#====== Defaults
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+#====== Source any other Run Commands
+set -m
+source ~/.bash_aliases
+
+#====== All about bash history
+export HISTCONTROL=ignoreboth:erasedups
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+shopt -s histappend
+shopt -s cmdhist
+
+#-- Archive bash history
+KEEP=200
+for FILE in ~/.bash_history ~/.python_history
+do
+    BACKUP=$FILE.$(date +%y%m)
+    if [ -s "$FILE" -a "$FILE" -nt "$BACKUP" ]; then
+        # history file is newer than backup
+        if [[ -f $BACKUP ]]; then
+            # there is already a backup
+            cp -f $FILE $BACKUP
+        else
+            # create new backup, leave last few commands and reinitialize
+            mv -f $FILE $BACKUP
+            tail -n$KEEP $BACKUP > $FILE
+            history -r
+        fi
+    fi
+done
+
+#====== Prompt [https://linux.101hacks.com/ps1-examples/prompt-color-using-tput/]
+#-- Simple
+if grep -P "$(hostname -i)\b" /etc/hosts > /dev/null; then
+    #-- Remote
+    etc_host=$(grep -P "$(hostname -i)\b" /etc/hosts | tr -s ' ' |cut -d ' ' -f 2)
+    prompt='\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]$(hostname -i)
+              \[$(tput bold)$(tput setaf 4)\]$etc_host
+              \[$(tput bold)$(tput setaf 2)\]\w $PS2
+              \[$(tput bold)$(tput setaf 7)\]\n$
+              \[$(tput sgr0)\]'
+    PS1=$(echo $prompt | tr -s ' ')
+else
+    #-- Local
+    PROMPT_DIRTRIM=2
+    PS1="\[$(tput bold)$(tput setaf 1)\]\w \[$(tput bold)$(tput setaf 7)\]$ \[$(tput sgr0)\]"
+fi
+
+#====== Exports
+export PATH=$PATH:~/.local/share/kyrat/bin

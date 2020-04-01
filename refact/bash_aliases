@@ -1,0 +1,25 @@
+#====== Aliases
+#-- General
+shopt -s expand_aliases
+shopt -s checkwinsize
+alias l='ls -l'
+alias ll='ls -Al'
+alias vi='vim'
+alias vim='$(if type nvim &> /dev/null; then echo nvim; else echo vim; fi)'
+alias ..='cd ..'
+alias tree='tree -C'
+alias trls='tree -C | less -R'
+alias re='source ~/.bashrc'
+alias h='hostname'
+alias p='pwd;pwd -P'
+alias ks='kyrat'
+alias vm='cat /etc/hosts | grep $1 --color=never'
+alias gs='git s'
+alias gl='git lg'
+alias ga='git add'
+alias gc='git commit -m'
+alias sm='f(){ markdown $1 | lynx -stdin;}; f'
+alias td='tmux attach -d'
+
+
+#-- Project Related
