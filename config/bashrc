@@ -23,7 +23,7 @@ export PATH
 #====== Globals {{{
 
 cwd=$(dirname "$BASH_SOURCE[0]}")
-hosts_file=`[ -f $cwd/etc_hosts ] && echo $cwd/etc_hosts || echo $HOME/.dotfiles/etc_hosts`
+hosts_file=`[ -f $cwd/.etc_hosts ] && echo $cwd/.etc_hosts || echo $HOME/.dotfiles/etc_hosts`
 
 # }}}
 
@@ -35,6 +35,22 @@ fill () {
             cat /dev/urandom | tr -dc [:space:][:print:] | head -c $3 > file$i;
         done
 }
+
+nv () {
+    if command -v nvim 1>/dev/null; then
+        command nvim "$@";
+    else
+        if [ ! -d $HOME/.dotfiles/squashfs-root ]; then
+            mkdir -pv $HOME/.dotfiles && cd "$_";
+            echo '.....Downloading NeoVim.....';
+            curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage;
+            chmod u+x nvim.appimage && ./nvim.appimage --appimage-extract;
+            cd -;
+        fi
+        command $HOME/.dotfiles/squashfs-root/usr/bin/nvim -u $khome/.init.vim "$@";
+    fi
+}
+
 
 # }}}
 
@@ -87,15 +103,15 @@ done
 
 alias l='ls -l'
 alias ll='ls -Al'
-alias lath='ls -Ath'
-alias lth='ls -lth'
+alias lt='ls -lth'
+alias lat='ls -Ath'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias tree='tree -C'
 alias trls='tree -C | less -R'
 alias h='hostname'
 alias p='pwd;pwd -P'
-alias re="source $cwd/.bashrc"
+alias re='source '`[ ! -z $khome ] && echo $khome/.bashrc || echo $HOME/.bashrc`
 alias sm='f(){ markdown $1 | lynx -stdin;}; f'
 alias vm="cat $hosts_file | grep $1 --color=never"
 alias gs='git s'
@@ -105,6 +121,9 @@ alias gal='git aliases'
 alias ga='git add'
 alias gc='git commit -m'
 alias g='gluster'
+alias tm='tmux new -s'
+alias td='tmux attach -d'
+alias ks='kyrat'
 
 # }}}
 
@@ -113,12 +132,14 @@ alias g='gluster'
 
 if ! [ -L $hosts_file ]; then
     #-- Remote
-    etc_host=$(grep -P "$(hostname -i)\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
-    prompt='\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]$(hostname -i)
+    hname=`command -v hostname 1>/dev/null && echo $(hostname -i)`
+    hname=${hname:=DUMMY}
+    etc_host=$(grep -P "$hname\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
+    prompt="\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]$(echo ${hname/DUMMY/\\h})
               \[$(tput bold)$(tput setaf 4)\]$etc_host
               \[$(tput bold)$(tput setaf 2)\]\w $PS2
               \[$(tput bold)$(tput setaf 7)\]\n$
-              \[$(tput sgr0)\]'
+              \[$(tput sgr0)\]"
     PS1=$(echo $prompt | tr -s ' ')
 else
     #-- Local

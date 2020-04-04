@@ -17,6 +17,8 @@ echo "BEGIN ${SCRIPT_NAME%.sh}"
 
 # Creating required directories
 mkdir -pv $HOME/.config/nvim/
+mkdir -pv $HOME/.local/share/kyrat
+git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat
 
 # Symlinks
 [ -L $HOME/.dotfiles ] && rm $HOME/.dotfiles
