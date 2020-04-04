@@ -3,7 +3,15 @@
 
 " Plugins (minpac) {{{
 
+set packpath^=~/.nvim
 packadd minpac
+
+if !exists('*minpac#init')
+    " Install minpac
+    :!mkdir -pv $HOME/.nvim/pack/minpac/opt/minpac
+    :!cd $HOME/.nvim/pack/minpac/opt/ && git clone https://github.com/k-takata/minpac.git
+endif
+
 call minpac#init()
 call minpac#add('tpope/vim-surround')
 call minpac#add('tpope/vim-unimpaired')
@@ -115,12 +123,5 @@ augroup BgHighlight
     autocmd WinEnter * set cursorline
     autocmd WinLeave * set nocursorline
 augroup END
-
-" }}}
-
-" Variables {{{
-
-" For Bash Aliases
-let $BASH_ENV="~/.bash_aliases"
 
 " }}}

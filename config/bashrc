@@ -1,0 +1,131 @@
+# Filename:     bashrc
+# Github:       https://github.com/leelavg/dotfiles
+
+#====== Defaults {{{
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# }}}
+
+#====== Globals {{{
+
+cwd=$(dirname "$BASH_SOURCE[0]}")
+hosts_file=`[ -f $cwd/etc_hosts ] && echo $cwd/etc_hosts || echo $HOME/.dotfiles/etc_hosts`
+
+# }}}
+
+#====== Functions{{{
+
+fill () {
+    for ((i = $1; i <= $2; i++));
+        do
+            cat /dev/urandom | tr -dc [:space:][:print:] | head -c $3 > file$i;
+        done
+}
+
+# }}}
+
+#====== Shell Options {{{
+
+set -m
+set -o vi
+shopt -s histappend
+shopt -s cmdhist
+shopt -s checkwinsize
+
+# }}}
+
+#====== Exports {{{
+
+export HISTCONTROL=ignoreboth:erasedups
+export HISTSIZE=10000
+export HISTFILESIZE=20000
+export EDITOR=nvim
+export VISUAL=vim
+export KYRAT_HOME=~/.dotfiles
+[ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
+
+
+# }}}
+
+#====== Archive command history {{{
+
+KEEP=200
+for FILE in ~/.bash_history ~/.python_history
+do
+    BACKUP=$FILE.$(date +%y%m)
+    if [ -s "$FILE" -a "$FILE" -nt "$BACKUP" ]; then
+        # history file is newer than backup
+        if [[ -f $BACKUP ]]; then
+            # there is already a backup
+            /usr/bin/cp -f $FILE $BACKUP
+        else
+            # create new backup, leave last few commands and reinitialize
+            mv -f $FILE $BACKUP
+            tail -n$KEEP $BACKUP > $FILE
+            history -r
+        fi
+    fi
+done
+
+# }}}
+
+#====== ALiases {{{
+
+alias l='ls -l'
+alias ll='ls -Al'
+alias lath='ls -Ath'
+alias lth='ls -lth'
+alias ..='cd ..'
+alias ...='cd ../..'
+alias tree='tree -C'
+alias trls='tree -C | less -R'
+alias h='hostname'
+alias p='pwd;pwd -P'
+alias re="source $cwd/.bashrc"
+alias sm='f(){ markdown $1 | lynx -stdin;}; f'
+alias vm="cat $hosts_file | grep $1 --color=never"
+alias gs='git s'
+alias gl='git lg'
+alias gh='git hist'
+alias gal='git aliases'
+alias ga='git add'
+alias gc='git commit -m'
+alias g='gluster'
+
+# }}}
+
+#====== Prompt [https://linux.101hacks.com/ps1-examples/prompt-color-using-tput/] {{{
+
+
+if ! [ -L $hosts_file ]; then
+    #-- Remote
+    etc_host=$(grep -P "$(hostname -i)\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
+    prompt='\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]$(hostname -i)
+              \[$(tput bold)$(tput setaf 4)\]$etc_host
+              \[$(tput bold)$(tput setaf 2)\]\w $PS2
+              \[$(tput bold)$(tput setaf 7)\]\n$
+              \[$(tput sgr0)\]'
+    PS1=$(echo $prompt | tr -s ' ')
+else
+    #-- Local
+    PROMPT_DIRTRIM=2
+    PS1="\[$(tput bold)$(tput setaf 1)\]\w \[$(tput bold)$(tput setaf 7)\]$ \[$(tput sgr0)\]"
+fi
+
+# }}}
+
+

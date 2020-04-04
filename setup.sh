@@ -4,80 +4,33 @@
 set -e
 set -o pipefail
 
+ABSOLUTE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
+
 # Logging to file and displaying on terminal
 # https://unix.stackexchange.com/questions/323142/send-to-log-and-display-on-console
 TIME=`date +%b_%d_%y-%H-%M-%S`
 exec 3<&1
-coproc mytee { tee setup_$TIME.log >&3; }
+coproc mytee { tee $ABSOLUTE_PATH/setup_$TIME.log >&3; }
 exec >&${mytee[1]} 2>&1
-
-ABSOLUTE_PATH="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SCRIPT_NAME="$(basename "${BASH_SOURCE[0]}")"
 echo "BEGIN ${SCRIPT_NAME%.sh}"
 
-# Installing required Binaries
-if [[ -n $1 && $1 == 1 ]]; then
+# Creating required directories
+mkdir -pv $HOME/.config/nvim/
 
-    sudo dnf -y install vim neovim tmux sshpass ansible
+# Symlinks
+[ -L $HOME/.dotfiles ] && rm $HOME/.dotfiles
+ln -sfv $ABSOLUTE_PATH/config $HOME/.dotfiles
+ln -sfv /etc/hosts $HOME/.dotfiles/etc_hosts
+ln -sfv $HOME/.dotfiles/init.vim  $HOME/.config/nvim/
 
-fi
-
-# Start afresh with dotfiles
-if [[ -n $2 && $2 == 1 ]]; then
-
-    mkdir -pv $ABSOLUTE_PATH/dot_bkp
-
-    # Shell
-    for rc_file in bashrc bash_aliases gitconfig
-    do
-        [ -f $HOME/.$rc_file ] && mv -fv $HOME/.$rc_file $ABSOLUTE_PATH/dot_bkp/$rc_file
-        ln -sfv $ABSOLUTE_PATH/shell/$rc_file $HOME/.$rc_file
-    done
-
-    # Vim
-    [ -d $HOME/.vim ] && mv -fv $HOME/.vim $ABSOLUTE_PATH/dot_bkp/vim
-    [ -f $HOME/.vimrc ] && mv -fv $HOME/.vimrc $ABSOLUTE_PATH/dot_bkp/vimrc
-    [ -f $HOME/.config/nvim/init ] && mv -fv $HOME/.config/nvim/init $ABSOLUTE_PATH/dot_bkp/init
-    rm -rfv $HOME/.vim*
-    mkdir -pv $HOME/.vim/pack/minpac/opt/minpac
-    mkdir -pv $HOME/.vim/configs
-
-    cd $HOME/.vim/pack/minpac/opt
-    git clone https://github.com/k-takata/minpac.git
-    cd $ABSOLUTE_PATH
-    for file in $ABSOLUTE_PATH/vim/*
-    do
-        file=`basename $file`
-        if [[ $file =~ vimrc ]]; then
-            ln -sfv $ABSOLUTE_PATH/vim/$file $HOME/.$file
-        elif [[ $file =~ init ]]; then
-            [ -d $HOME/.config/nvim ] && mv -fv $HOME/.config/nvim $ABSOLUTE_PATH/dot_bkp/nvim
-            mkdir -pv $HOME/.config/nvim; ln -sfv $ABSOLUTE_PATH/vim/$file $HOME/.config/nvim/
-        elif [[ $file =~ config || $file =~ pkg ]]; then
-            ln -sfv $ABSOLUTE_PATH/vim/$file $HOME/.vim/
-        else
-            ln -sfv $ABSOLUTE_PATH/vim/$file $HOME/.vim/configs/
-        fi
-    done
-
-
-    # Tmux
-    [ -f $HOME/.tmux.conf ] && mv -fv $HOME/.tmux.conf $ABSOLUTE_PATH/dot_bkp/
-    ln -sfv $ABSOLUTE_PATH/tmux/tmux.conf $HOME/.tmux.conf
-
-    # Ansible
-    [ -f $HOME/.ansible] && mv -fv $HOME/.ansible $ABSOLUTE_PATH/dot_bkp/
-    ln -sfv $ABSOLUTE_PATH/adhoc/ansible.cfg $HOME/.ansible.cfg
-
-    # Remote SSH rc (https://github.com/fsquillace/kyrat - original)
-    [ -d $HOME/.config/kyrat ] && mv -fv $HOME/.config/kyrat $ABSOLUTE_PATH/dot_bkp/
-    ln -sfv $ABSOLUTE_PATH/shell/kyrat $HOME/.config/
-
-    FILENAME=dotfile_backup-$TIME.tar.gz
-    tar -cpzvf $FILENAME dot_bkp
-    rm -rf dot_bkp
-
-fi
+for file in $HOME/.dotfiles/*
+do
+    file=`basename $file`
+    if ! [[ $file =~ ^init|etc ]]; then
+        ln -sfv $HOME/.dotfiles/$file $HOME/.$file
+    fi
+done
 
 echo "${SCRIPT_NAME%.sh} END"
 

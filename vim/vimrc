@@ -1,9 +1,0 @@
-" Load Vim Config
-if filereadable(expand('~/.vim/config.vim'))
-    source ~/.vim/config.vim
-end
-
-"Load MinPac Settings
-if filereadable(expand('~/.vim/pkg.vim'))
-    source ~/.vim/pkg.vim
-end
