@@ -15,10 +15,6 @@ coproc mytee { tee $ABSOLUTE_PATH/setup_$TIME.log >&3; }
 exec >&${mytee[1]} 2>&1
 echo "BEGIN ${SCRIPT_NAME%.sh}"
 
-# Creating required directories
-mkdir -pv $HOME/.local/share/kyrat
-# git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat
-
 # Symlinks
 [ -L $HOME/.dotfiles ] && rm $HOME/.dotfiles
 ln -sfv $ABSOLUTE_PATH/config $HOME/.dotfiles
@@ -29,6 +25,10 @@ do
     file=`basename $file`
     ln -sfv $HOME/.dotfiles/$file $HOME/.$file
 done
+
+# Creating required directories
+mkdir -pv $HOME/.local/share/kyrat
+git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat
 
 echo "${SCRIPT_NAME%.sh} END"
 

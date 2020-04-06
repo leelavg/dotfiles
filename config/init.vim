@@ -4,12 +4,15 @@
 " Plugins (minpac) {{{
 
 set packpath^=~/.nvim
-packadd minpac
+if isdirectory($HOME.'/.nvim/pack')
+    packadd minpac
+endif
 
 if !exists('*minpac#init')
     " Install minpac
-    :!mkdir -pv $HOME/.nvim/pack/minpac/opt/minpac
-    :!cd $HOME/.nvim/pack/minpac/opt/ && git clone https://github.com/k-takata/minpac.git
+    call mkdir ($HOME.'/.nvim/pack/minpac/opt/minpac', 'p')
+    :!cd $HOME/.nvim/pack/minpac/opt/ && git clone https://github.com/k-takata/minpac.git 2>/dev/null
+    packadd minpac
 endif
 
 call minpac#init()
