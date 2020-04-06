@@ -22,8 +22,8 @@ export PATH
 
 #====== Globals {{{
 
-cwd=$(dirname "$BASH_SOURCE[0]}")
-hosts_file=`[ -f $cwd/.etc_hosts ] && echo $cwd/.etc_hosts || echo $HOME/.dotfiles/etc_hosts`
+cwd=`[ ! -z $khome ] && echo $khome || echo $HOME`
+hosts_file=$cwd/.etc_hosts
 
 # }}}
 
@@ -38,7 +38,7 @@ fill () {
 
 nv () {
     if command -v nvim 1>/dev/null; then
-        command nvim "$@";
+        command nvim -u $cwd/.init.vim "$@";
     else
         if [ ! -d $HOME/.dotfiles/squashfs-root ]; then
             mkdir -pv $HOME/.dotfiles && cd "$_";
@@ -47,7 +47,7 @@ nv () {
             chmod u+x nvim.appimage && ./nvim.appimage --appimage-extract;
             cd -;
         fi
-        command $HOME/.dotfiles/squashfs-root/usr/bin/nvim -u $khome/.init.vim "$@";
+        command $HOME/.dotfiles/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
     fi
 }
 
@@ -111,7 +111,7 @@ alias tree='tree -C'
 alias trls='tree -C | less -R'
 alias h='hostname'
 alias p='pwd;pwd -P'
-alias re='source '`[ ! -z $khome ] && echo $khome/.bashrc || echo $HOME/.bashrc`
+alias re="source $cwd/.bashrc"
 alias sm='f(){ markdown $1 | lynx -stdin;}; f'
 alias vm="cat $hosts_file | grep $1 --color=never"
 alias gs='git s'
@@ -130,7 +130,7 @@ alias ks='kyrat'
 #====== Prompt [https://linux.101hacks.com/ps1-examples/prompt-color-using-tput/] {{{
 
 
-if ! [ -L $hosts_file ]; then
+if [ -n "$SSH_TTY" ] || [ -n "$SSH_CLIENT" ]; then
     #-- Remote
     hname=`command -v hostname 1>/dev/null && echo $(hostname -i)`
     hname=${hname:=DUMMY}

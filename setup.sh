@@ -16,22 +16,18 @@ exec >&${mytee[1]} 2>&1
 echo "BEGIN ${SCRIPT_NAME%.sh}"
 
 # Creating required directories
-mkdir -pv $HOME/.config/nvim/
 mkdir -pv $HOME/.local/share/kyrat
-git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat
+# git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat
 
 # Symlinks
 [ -L $HOME/.dotfiles ] && rm $HOME/.dotfiles
 ln -sfv $ABSOLUTE_PATH/config $HOME/.dotfiles
 ln -sfv /etc/hosts $HOME/.dotfiles/etc_hosts
-ln -sfv $HOME/.dotfiles/init.vim  $HOME/.config/nvim/
 
 for file in $HOME/.dotfiles/*
 do
     file=`basename $file`
-    if ! [[ $file =~ ^init|etc ]]; then
-        ln -sfv $HOME/.dotfiles/$file $HOME/.$file
-    fi
+    ln -sfv $HOME/.dotfiles/$file $HOME/.$file
 done
 
 echo "${SCRIPT_NAME%.sh} END"
