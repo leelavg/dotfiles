@@ -27,7 +27,7 @@ hosts_file=$cwd/.etc_hosts
 
 # }}}
 
-#====== Functions{{{
+#====== Functions {{{
 
 fill () {
     for ((i = $1; i <= $2; i++));
@@ -149,5 +149,4 @@ else
 fi
 
 # }}}
-
 
