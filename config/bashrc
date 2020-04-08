@@ -40,14 +40,14 @@ nv () {
     if command -v nvim 1>/dev/null; then
         command nvim -u $cwd/.init.vim "$@";
     else
-        if [ ! -d $HOME/.dotfiles/squashfs-root ]; then
-            mkdir -pv $HOME/.dotfiles && cd "$_";
+        if [ ! -d $HOME/.nvim/squashfs-root ]; then
+            mkdir -pv $HOME/.nvim && cd "$_";
             echo '.....Downloading NeoVim.....';
             curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage;
             chmod u+x nvim.appimage && ./nvim.appimage --appimage-extract;
             cd -;
         fi
-        command $HOME/.dotfiles/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
+        command $HOME/.nvim/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
     fi
 }
 
