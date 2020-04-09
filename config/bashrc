@@ -57,7 +57,7 @@ nv () {
 #====== Shell Options {{{
 
 set -m
-set -o vi
+bind -x '"\C-l": clear;'
 shopt -s histappend
 shopt -s cmdhist
 shopt -s checkwinsize
