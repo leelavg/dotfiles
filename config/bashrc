@@ -27,7 +27,7 @@ hosts_file=$cwd/.etc_hosts
 
 # }}}
 
-#====== Functions{{{
+#====== Functions {{{
 
 fill () {
     for ((i = $1; i <= $2; i++));
@@ -40,14 +40,14 @@ nv () {
     if command -v nvim 1>/dev/null; then
         command nvim -u $cwd/.init.vim "$@";
     else
-        if [ ! -d $HOME/.dotfiles/squashfs-root ]; then
-            mkdir -pv $HOME/.dotfiles && cd "$_";
+        if [ ! -d $HOME/.nvim/squashfs-root ]; then
+            mkdir -pv $HOME/.nvim && cd "$_";
             echo '.....Downloading NeoVim.....';
             curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage;
             chmod u+x nvim.appimage && ./nvim.appimage --appimage-extract;
             cd -;
         fi
-        command $HOME/.dotfiles/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
+        command $HOME/.nvim/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
     fi
 }
 
@@ -133,7 +133,7 @@ alias ks='kyrat'
 
 if [ -n "$SSH_TTY" ] || [ -n "$SSH_CLIENT" ]; then
     #-- Remote
-    hname=`command -v hostname 1>/dev/null && echo $(hostname -i)`
+    hname=`command -v hostname 1>/dev/null && echo $(hostname -i) | awk '{print $NF}'`
     hname=${hname:=DUMMY}
     etc_host=$(grep -P "$hname\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
     prompt="\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]$(echo ${hname/DUMMY/\\h})
@@ -149,5 +149,4 @@ else
 fi
 
 # }}}
-
 
