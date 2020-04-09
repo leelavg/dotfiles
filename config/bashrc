@@ -133,7 +133,7 @@ alias ks='kyrat'
 
 if [ -n "$SSH_TTY" ] || [ -n "$SSH_CLIENT" ]; then
     #-- Remote
-    hname=`command -v hostname 1>/dev/null && echo $(hostname -i)`
+    hname=`command -v hostname 1>/dev/null && echo $(hostname -i) | awk '{print $NF}'`
     hname=${hname:=DUMMY}
     etc_host=$(grep -P "$hname\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
     prompt="\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]$(echo ${hname/DUMMY/\\h})
