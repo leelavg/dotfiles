@@ -9,10 +9,19 @@ if isdirectory($HOME.'/.nvim/packages/pack')
 endif
 
 if !exists('*minpac#init')
+
+    if !has('git')
+        " Install git
+        :silent !echo '..... Installing git command line utility .....'
+        :silent !yum -y install git &>/dev/null
+        :silent !echo '..... Installed git command line utility .....'
+    endif
+
     " Install minpac
     call mkdir ($HOME.'/.nvim/packages/pack/minpac/opt/minpac', 'p')
-    :!cd $HOME/.nvim/packages/pack/minpac/opt/ && git clone https://github.com/k-takata/minpac.git 2>/dev/null
+    :silent !cd $HOME/.nvim/packages/pack/minpac/opt/ && git clone https://github.com/k-takata/minpac.git 2>/dev/null
     packadd minpac
+
 endif
 
 call minpac#init()
