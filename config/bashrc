@@ -40,13 +40,24 @@ nv () {
     if command -v nvim 1>/dev/null; then
         command nvim -u $cwd/.init.vim "$@";
     else
-        if [ ! -d $HOME/.nvim/squashfs-root ]; then
-            mkdir -pv $HOME/.nvim && cd "$_";
-            echo '.....Downloading NeoVim.....';
-            curl -LO https://github.com/neovim/neovim/releases/download/stable/nvim.appimage;
-            chmod u+x nvim.appimage && ./nvim.appimage --appimage-extract;
-            cd -;
+        if [ ! -e $HOME/.nvim/nvim.appimage ]; then
+            mkdir -p $HOME/.nvim && cd "$_";
+            echo '..... Downloading NeoVim AppImage .....';
+            curl -LO \
+            https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
+            &>/dev/null;
+            echo '..... Downloaded NeoVim AppImage .....';
+            cd - 1>/dev/null;
         fi
+
+        if [ -e $HOME/.nvim/nvim.appimage ] && [ ! -d $HOME/.nvim/squashfs-root ]; then
+            cd $HOME/.nvim;
+            echo '..... Extracting NeoVim AppImage .....';
+            chmod u+x nvim.appimage && ./nvim.appimage --appimage-extract 1>/dev/null;
+            echo '..... Extracted NeoVim AppImage .....';
+            cd - 1>/dev/null;
+        fi
+
         command $HOME/.nvim/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
     fi
 }
@@ -74,7 +85,6 @@ export VISUAL=vim
 export KYRAT_HOME=~/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
 
-
 # }}}
 
 #====== Archive command history {{{
@@ -99,7 +109,7 @@ done
 
 # }}}
 
-#====== ALiases {{{
+#====== Aliases {{{
 
 alias l='ls -l'
 alias ll='ls -Al'
@@ -149,4 +159,11 @@ else
 fi
 
 # }}}
+
+#====== Set by Packages {{{
+
+export ANSIBLE_LIBRARY=:/root/toolbox/gdeploy/modules
+export GDEPLOY_TEMPLATES=/root/toolbox/gdeploy
+
+
 
