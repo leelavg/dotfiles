@@ -26,13 +26,13 @@ endif
 
 call minpac#init()
 call minpac#add('tpope/vim-surround')
-call minpac#add('tpope/vim-unimpaired')
 call minpac#add('tpope/vim-repeat')
-call minpac#add('tpope/vim-commentary')
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('machakann/vim-highlightedyank')
-call minpac#add('k-takata/minpac', {'type':'opt'})
+call minpac#add('k-takata/minpac', {'branch':'devel','type':'opt'})
 call minpac#add('itchyny/lightline.vim')
+call minpac#add('google/yapf', {'subdir':'plugins/vim'})
+call minpac#add('tomtom/tcomment_vim')
 
 " }}}
 
@@ -86,10 +86,7 @@ syntax on                                   " syntax highlighting
 " All Mappings {{{
 
 map <space> <leader>
-map <leader>so :source $cwd/.init.vim <cr>
-map <leader>b :e $cwd/.bashrc <cr>
-map <leader>t :e $cwd/.tmux.conf <cr>
-map <leader>n :e $cwd/.init.vim <cr>
+map <leader>so <silent> :source $cwd/.init.vim <cr>
 map <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
 map <leader>l :set cursorline!<CR>
 map <leader>p :set paste!<CR>
@@ -129,17 +126,7 @@ command! PackStatus call minpac#status()
 
 " Rebalance windows on vim resize
 autocmd VimResized * :wincmd =
-
-autocmd BufNewFile,BufRead *.thpl set filetype=perl
-autocmd BufWinLeave ?.* mkview
-autocmd BufWinEnter ?.* silent loadview
 autocmd Filetype help nnoremap <buffer> q :q<CR>
-
-augroup BgHighlight
-    autocmd!
-    autocmd WinEnter * set cursorline
-    autocmd WinLeave * set nocursorline
-augroup END
 
 " }}}
 
