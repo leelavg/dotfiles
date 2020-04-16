@@ -22,7 +22,7 @@ export PATH
 
 #====== Globals {{{
 
-cwd=`[ ! -z $khome ] && echo $khome || echo $HOME`
+export cwd=`[ ! -z $khome ] && echo $khome || echo $HOME`
 hosts_file=$cwd/.etc_hosts
 
 # }}}
@@ -56,6 +56,7 @@ nv () {
             chmod u+x nvim.appimage && ./nvim.appimage --appimage-extract 1>/dev/null;
             echo '..... Extracted NeoVim AppImage .....';
             cd - 1>/dev/null;
+            echo '..... Opening NeoVim .....' && sleep 1;
         fi
 
         command $HOME/.nvim/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
@@ -80,8 +81,8 @@ shopt -s checkwinsize
 export HISTCONTROL=ignoreboth:erasedups
 export HISTSIZE=10000
 export HISTFILESIZE=20000
-export EDITOR=nvim
-export VISUAL=vim
+export EDITOR=nv
+export VISUAL=nv
 export KYRAT_HOME=~/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
 
@@ -114,14 +115,13 @@ done
 alias l='ls -l'
 alias ll='ls -Al'
 alias lt='ls -lth'
-alias lat='ls -Ath'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias tree='tree -C'
 alias trls='tree -C | less -R'
 alias h='hostname'
 alias p='pwd;pwd -P'
-alias re="source $cwd/.bashrc"
+alias re="source $cwd/.bashrc && echo reloaded bashrc"
 alias sm='f(){ markdown $1 | lynx -stdin;}; f'
 alias vm="cat $hosts_file | grep $1 --color=never"
 alias gs='git s'

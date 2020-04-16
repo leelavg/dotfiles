@@ -12,9 +12,9 @@ if !exists('*minpac#init')
 
     if !has('git')
         " Install git
-        :silent !echo '..... Installing git command line utility .....'
+        :echo '..... Installing git command line utility .....'
         :silent !yum -y install git &>/dev/null
-        :silent !echo '..... Installed git command line utility .....'
+        :echo '..... Installed git command line utility .....'
     endif
 
     " Install minpac
@@ -63,8 +63,8 @@ set incsearch                               " Enable incremental search
 set smartcase                               " Include only uppercase words with uppercase search term
 set viminfo='100,<9999,s100                 " Store more info
 set formatoptions+=tcqrn1                   " Control formats on newlines
-set noshiftround                            " Neglect rounding to shiftwidth in block operations
-set textwidth=80                            " Break text after reaching textwidth
+set shiftround                              " Rounding to shiftwidth in block operations
+set textwidth=79                            " Break text after reaching textwidth
 set showmode                                " which mode are we in currently
 set lcs=tab:›\ ,trail:•,extends:#,nbsp:.    " lists character
 set inccommand=split                        " Searches in a split window
@@ -85,7 +85,10 @@ syntax on                                   " syntax highlighting
 " All Mappings {{{
 
 map <space> <leader>
-map <leader>so :source $MYVIMRC <bar> :doautocmd BufRead<cr>
+map <leader>so :source $cwd/.init.vim <cr>
+map <leader>b :vsp $cwd/.bashrc <cr>
+map <leader>t :vsp $cwd/.tmux.conf <cr>
+map <leader>n :vsp $cwd/.init.vim <cr>
 map <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
 map <leader>l :set cursorline!<CR>
 map <leader>p :set paste!<CR>
