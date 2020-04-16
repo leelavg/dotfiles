@@ -4,9 +4,6 @@
 [include]
     path = ~/.gitconfig_local
 
-[core]
-	editor = nv
-
 [color]
     ui = auto
 
