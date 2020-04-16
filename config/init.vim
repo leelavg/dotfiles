@@ -32,6 +32,7 @@ call minpac#add('tpope/vim-commentary')
 call minpac#add('christoomey/vim-tmux-navigator')
 call minpac#add('machakann/vim-highlightedyank')
 call minpac#add('k-takata/minpac', {'type':'opt'})
+call minpac#add('itchyny/lightline.vim')
 
 " }}}
 
@@ -65,7 +66,7 @@ set viminfo='100,<9999,s100                 " Store more info
 set formatoptions+=tcqrn1                   " Control formats on newlines
 set shiftround                              " Rounding to shiftwidth in block operations
 set textwidth=79                            " Break text after reaching textwidth
-set showmode                                " which mode are we in currently
+set noshowmode                              " lightline takes over status line
 set lcs=tab:›\ ,trail:•,extends:#,nbsp:.    " lists character
 set inccommand=split                        " Searches in a split window
 set smartindent                             " Context awareness
@@ -86,9 +87,9 @@ syntax on                                   " syntax highlighting
 
 map <space> <leader>
 map <leader>so :source $cwd/.init.vim <cr>
-map <leader>b :vsp $cwd/.bashrc <cr>
-map <leader>t :vsp $cwd/.tmux.conf <cr>
-map <leader>n :vsp $cwd/.init.vim <cr>
+map <leader>b :e $cwd/.bashrc <cr>
+map <leader>t :e $cwd/.tmux.conf <cr>
+map <leader>n :e $cwd/.init.vim <cr>
 map <leader>v :vnew <C-r>=escape(expand("%:p:h"), ' ') . '/'<cr>
 map <leader>l :set cursorline!<CR>
 map <leader>p :set paste!<CR>
@@ -118,8 +119,9 @@ command! PackStatus call minpac#status()
 
 " Status Line {{{
 
-highlight statusline ctermbg=white ctermfg=magenta
-highlight search     ctermbg=white ctermfg=red
+" tookover by 'lightline'
+" highlight statusline ctermbg=white ctermfg=magenta
+" highlight search     ctermbg=white ctermfg=red
 
 " }}}
 
@@ -138,5 +140,13 @@ augroup BgHighlight
     autocmd WinEnter * set cursorline
     autocmd WinLeave * set nocursorline
 augroup END
+
+" }}}
+
+" Variable Modifications {{{
+
+" Netrw
+let g:netrw_liststyle = 3
+let g:netrw_banner = 0
 
 " }}}
