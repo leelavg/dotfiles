@@ -164,4 +164,4 @@ export ANSIBLE_LIBRARY=:/root/toolbox/gdeploy/modules
 export GDEPLOY_TEMPLATES=/root/toolbox/gdeploy
 
 
-
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
