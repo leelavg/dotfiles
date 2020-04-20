@@ -30,24 +30,38 @@ function! InstallMinpac() abort
 
 endfunction
 
+" Minimal Plugins
+function! MinimalPlugins() abort
+        call minpac#add('tpope/vim-surround')
+        call minpac#add('tpope/vim-commentary')
+        call minpac#add('tpope/vim-repeat')
+        call minpac#add('machakann/vim-highlightedyank')
+        call minpac#add('jiangmiao/auto-pairs')
+endfunction
+
+" Extra Plugins
+function! ExtraPlugins() abort
+        call minpac#add('christoomey/vim-tmux-navigator')
+        call minpac#add('itchyny/lightline.vim')
+        call minpac#add('junegunn/fzf', { 'do': { -> system('./install') }})
+        call minpac#add('junegunn/fzf.vim')
+        call minpac#add('autozimu/LanguageClient-neovim', {'branch': 'next', 'do': { -> system('./install.sh') }})
+endfunction
+
 " Load Plugin Manager (minpac) on demand
-function! PackInit() abort
+function! PackInit(type) abort
 
     call InstallMinpac()
-
     packadd minpac
     call minpac#init()
     call minpac#add('k-takata/minpac', {'type':'opt', 'branch':'devel'})
 
-    call minpac#add('tpope/vim-surround')
-    call minpac#add('tpope/vim-repeat')
-    call minpac#add('christoomey/vim-tmux-navigator')
-    call minpac#add('machakann/vim-highlightedyank')
-    call minpac#add('itchyny/lightline.vim')
-    call minpac#add('jiangmiao/auto-pairs')
-    call minpac#add('preservim/nerdcommenter')
-    call minpac#add('junegunn/fzf', { 'do': { -> system('./install') }})
-    call minpac#add('junegunn/fzf.vim')
+    if a:type == 'minimal'
+        call MinimalPlugins()
+    elseif a:type == 'full'
+        call MinimalPlugins()
+        call ExtraPlugins()
+    endif
 
 endfunction
 
@@ -83,13 +97,13 @@ set viminfo='100,<9999,s100                 " Store more info
 set formatoptions+=tcqrn1                   " Control formats on newlines
 set shiftround                              " Rounding to shiftwidth in block operations
 set textwidth=79                            " Break text after reaching textwidth
-set noshowmode                              " lightline takes over status line
 set lcs=tab:›\ ,trail:•,extends:#,nbsp:.    " lists character
 set inccommand=split                        " Searches in a split window
 set smartindent                             " Context awareness
 set foldmethod=marker
 set smarttab
 set ruler
+set hidden
 
 " }}}
 
@@ -119,8 +133,10 @@ nnoremap <silent> <leader>m :Marks<cr>
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>rg! :Rg!<space>
 
+nnoremap <F5> :call LanguageClient_contextMenu()<cr>
+
 nmap 0 ^
-nmap <silent> <BS> :let @/=""<cr>
+nmap <silent> <BS> :nohl<cr>
 imap jk <esc>:w<cr>
 imap kj <esc>:w<cr>
 nmap j gj
@@ -134,17 +150,22 @@ command! Q q " Bind :Q to :q
 command! Qall qall
 command! QA qall
 command! E e
-command! PackUpdate source $cwd/.init.vim | call PackInit() | call minpac#update('', {'do': 'call minpac#status()'})
-command! PackClean  source $cwd/.init.vim | call PackInit() | call minpac#clean()
-command! PackStatus packadd minpac | call minpac#status()
+command! PackMinimal call PackInit('minimal') | call minpac#update()
+command! PackFull call PackInit('full') | call minpac#update()
+command! PackClean  call PackInit('full') | call minpac#clean()
+command! PackStatus  packadd minpac | call minpac#status()
 
 " }}}
 
-" Status Line {{{
+" Aesthetics{{{
 
-" tookover by 'lightline'
-" highlight statusline ctermbg=white ctermfg=magenta
-" highlight search     ctermbg=white ctermfg=red
+highlight VertSplit cterm=NONE
+
+if ! &rtp =~ 'lightline'
+    set showmode
+    highlight statusline ctermbg=white ctermfg=magenta
+    highlight search     ctermbg=white ctermfg=red
+endif
 
 " }}}
 
@@ -161,18 +182,12 @@ autocmd FileType fzf tnoremap <buffer> <Esc> <Esc>
 
 " Variable Modifications {{{
 
-" Netrw
-let g:netrw_liststyle = 3
-let g:netrw_banner = 0
-
 " FZF
 let g:fzf_commits_log_options = '--graph --color=always
-  \ --format="%C(yellow)%h%C(red)%d%C(reset)
-  \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
-let g:fzf_layout = { 'window': {
-            \ 'width': 0.9,
-            \ 'height': 0.7,
-            \ 'highlight': 'Comment',
-            \ 'rounded': v:false } }
+\ --format="%C(yellow)%h%C(red)%d%C(reset)
+\ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
+
+" LSP
+let g:LanguageClient_serverCommands = { 'python': ['/usr/local/bin/pyls'], }
 
 " }}}
