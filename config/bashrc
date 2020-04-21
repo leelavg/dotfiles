@@ -83,6 +83,7 @@ export HISTSIZE=10000
 export HISTFILESIZE=20000
 export KYRAT_HOME=~/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
+export EDITOR=vi
 
 # }}}
 
@@ -110,9 +111,9 @@ done
 
 #====== Aliases {{{
 
-alias l='ls -l'
-alias ll='ls -Al'
-alias lt='ls -lth'
+alias l='ls -lF'
+alias ll='ls -AlF'
+alias lt='ls -lthF'
 alias ..='cd ..'
 alias ...='cd ../..'
 alias tree='tree -C'
