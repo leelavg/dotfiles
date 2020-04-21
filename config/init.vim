@@ -45,7 +45,7 @@ function! ExtraPlugins() abort
         call minpac#add('itchyny/lightline.vim')
         call minpac#add('junegunn/fzf', { 'do': { -> system('./install') }})
         call minpac#add('junegunn/fzf.vim')
-        call minpac#add('autozimu/LanguageClient-neovim', {'branch': 'next', 'do': { -> system('./install.sh') }})
+        call minpac#add('miyakogi/conoline.vim')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -187,7 +187,7 @@ let g:fzf_commits_log_options = '--graph --color=always
 \ --format="%C(yellow)%h%C(red)%d%C(reset)
 \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
 
-" LSP
-let g:LanguageClient_serverCommands = { 'python': ['/usr/local/bin/pyls'], }
+" Conoline
+let g:conoline_auto_enable = 1
 
 " }}}
