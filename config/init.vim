@@ -72,11 +72,6 @@ endfunction
 set showmatch                               " show matching brackets.
 set ignorecase                              " case insensitive matching
 set hlsearch                                " highlight search results
-set tabstop=4                               " number of columns occupied by a tab character
-set softtabstop=4                           " see multiple spaces as tabstops so <BS> does the right thing
-set expandtab                               " converts tabs to white space
-set shiftwidth=4                            " width for autoindents
-set autoindent                              " indent a new line the same amount as the line just typed
 set number                                  " add line numbers
 set relativenumber                          " for easy movements
 set wildmenu                                " Vim tab completions
@@ -96,7 +91,6 @@ set smartcase                               " Include only uppercase words with 
 set viminfo='100,<9999,s100                 " Store more info
 set formatoptions+=tcqrn1                   " Control formats on newlines
 set shiftround                              " Rounding to shiftwidth in block operations
-set textwidth=79                            " Break text after reaching textwidth
 set lcs=tab:›\ ,trail:•,extends:#,nbsp:.    " lists character
 set inccommand=split                        " Searches in a split window
 set smartindent                             " Context awareness
@@ -104,6 +98,15 @@ set foldmethod=marker
 set smarttab
 set ruler
 set hidden
+
+" Basic Settings for Python
+set tabstop=4                               " number of columns occupied by a tab character
+set softtabstop=4                           " see multiple spaces as tabstops so <BS> does the right thing
+set shiftwidth=4                            " width for autoindents
+set textwidth=79                            " Break text after reaching textwidth
+set expandtab                               " converts tabs to white space
+set autoindent                              " indent a new line the same amount as the line just typed
+set fileformat=unix
 
 " }}}
 
@@ -177,6 +180,13 @@ autocmd Filetype help nnoremap <buffer> q :q<CR>
 
 " Escape inside a FZF terminal window should exit the terminal window
 autocmd FileType fzf tnoremap <buffer> <Esc> <Esc>
+
+" Highlight Window
+augroup BgHighlight
+    autocmd!
+    autocmd WinEnter * set colorcolumn=80
+    autocmd WinLeave * set colorcolumn=0
+augroup END
 
 " }}}
 
