@@ -84,6 +84,7 @@ export HISTFILESIZE=20000
 export KYRAT_HOME=~/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
 export EDITOR=vi
+export PYTHONSTARTUP=$HOME/pystartup.py
 
 # }}}
 
@@ -134,6 +135,7 @@ alias tm='tmux new -s'
 alias td='tmux attach -d'
 alias tl='tmux ls'
 alias ks='kyrat'
+alias gb='git rev-parse --abbrev-ref HEAD 2>/dev/null'
 
 # }}}
 
