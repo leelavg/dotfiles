@@ -33,14 +33,15 @@ endfunction
 " Minimal Plugins
 function! MinimalPlugins() abort
         call minpac#add('tpope/vim-surround')
-        call minpac#add('tpope/vim-commentary')
         call minpac#add('tpope/vim-repeat')
         call minpac#add('machakann/vim-highlightedyank')
         call minpac#add('jiangmiao/auto-pairs')
+        call minpac#add('unblevable/quick-scope')
 endfunction
 
 " Extra Plugins
 function! ExtraPlugins() abort
+        call minpac#add('tpope/vim-commentary')
         call minpac#add('christoomey/vim-tmux-navigator')
         call minpac#add('itchyny/lightline.vim')
         call minpac#add('junegunn/fzf', { 'do': { -> system('./install') }})
@@ -199,5 +200,8 @@ let g:fzf_commits_log_options = '--graph --color=always
 
 " Conoline
 let g:conoline_auto_enable = 1
+
+" Quickscope
+let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " }}}
