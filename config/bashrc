@@ -136,6 +136,7 @@ alias td='tmux attach -d'
 alias tl='tmux ls'
 alias ks='kyrat'
 alias gb='git rev-parse --abbrev-ref HEAD 2>/dev/null'
+alias gr='git branch'
 
 # }}}
 
