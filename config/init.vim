@@ -182,6 +182,10 @@ autocmd Filetype help nnoremap <buffer> q :q<CR>
 " Escape inside a FZF terminal window should exit the terminal window
 autocmd FileType fzf tnoremap <buffer> <Esc> <Esc>
 
+" QuickScope character highlights
+highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+
 " Highlight Window
 augroup BgHighlight
     autocmd!

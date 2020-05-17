@@ -24,6 +24,7 @@ export PATH
 
 export cwd=`[ ! -z $khome ] && echo $khome || echo $HOME`
 hosts_file=$cwd/.etc_hosts
+complete -F __start_kubectl oc
 
 # }}}
 
@@ -85,6 +86,7 @@ export KYRAT_HOME=~/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
 export EDITOR=vi
 export PYTHONSTARTUP=$HOME/pystartup.py
+command -v go 1>/dev/null && export PATH=$PATH:$(go env GOPATH)/bin
 
 # }}}
 
@@ -131,12 +133,13 @@ alias gal='git aliases'
 alias ga='git add'
 alias gc='git commit -m'
 alias g='gluster'
-alias tm='tmux new -s'
+alias tm="tmux -f $cwd/.tmux.conf new -s"
 alias td='tmux attach -d'
 alias tl='tmux ls'
 alias ks='kyrat'
 alias gb='git rev-parse --abbrev-ref HEAD 2>/dev/null'
 alias gr='git branch'
+alias oc='kubectl'
 
 # }}}
 
