@@ -24,6 +24,7 @@ export PATH
 
 export cwd=`[ ! -z $khome ] && echo $khome || echo $HOME`
 hosts_file=$cwd/.etc_hosts
+source <(kubectl completion bash)
 complete -F __start_kubectl oc
 
 # }}}
@@ -86,7 +87,11 @@ export KYRAT_HOME=~/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
 export EDITOR=vi
 export PYTHONSTARTUP=$HOME/pystartup.py
-command -v go 1>/dev/null && export PATH=$PATH:$(go env GOPATH)/bin
+if command -v go 1>/dev/null;
+then
+    export GOPATH=$(go env GOPATH)
+    export PATH=$PATH:$(go env GOPATH)/bin
+fi
 
 # }}}
 
