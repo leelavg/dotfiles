@@ -47,6 +47,7 @@ function! ExtraPlugins() abort
         call minpac#add('junegunn/fzf', { 'do': { -> system('./install') }})
         call minpac#add('junegunn/fzf.vim')
         call minpac#add('miyakogi/conoline.vim')
+        call minpac#add('numirias/semshi', {'do': ':UpdateRemotePlugins'})
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -64,6 +65,11 @@ function! PackInit(type) abort
         call ExtraPlugins()
     endif
 
+endfunction
+
+" Lightline expand file name
+function! LightlineFilename()
+  return expand('%')
 endfunction
 
 " }}}
@@ -207,5 +213,19 @@ let g:conoline_auto_enable = 1
 
 " Quickscope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
+
+" Lightline
+let g:lightline = {
+      \ 'active': {
+      \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ]
+      \ }
+      \ }
+
+let g:lightline = {
+\ 'colorscheme': 'wombat',
+\ 'component_function': {
+\   'filename': 'LightlineFilename'
+\ }
+\ }
 
 " }}}

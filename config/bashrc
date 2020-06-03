@@ -87,6 +87,7 @@ export KYRAT_HOME=~/.dotfiles
 export EDITOR=vi
 export PYTHONSTARTUP=$HOME/pystartup.py
 command -v go 1>/dev/null && export PATH=$PATH:$(go env GOPATH)/bin
+export TERM=xterm-256color
 
 # }}}
 
@@ -167,8 +168,5 @@ fi
 
 #====== Set by Packages {{{
 
-export ANSIBLE_LIBRARY=:/root/toolbox/gdeploy/modules
-export GDEPLOY_TEMPLATES=/root/toolbox/gdeploy
-
-
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
+
