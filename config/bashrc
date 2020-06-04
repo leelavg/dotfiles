@@ -89,8 +89,6 @@ export KYRAT_HOME=~/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
 export EDITOR=vi
 export PYTHONSTARTUP=$HOME/pystartup.py
-command -v go 1>/dev/null && export PATH=$PATH:$(go env GOPATH)/bin
-export TERM=xterm-256color
 if command -v go 1>/dev/null;
 then
     export GOPATH=$(go env GOPATH)
@@ -135,20 +133,28 @@ alias p='pwd;pwd -P'
 alias re="source $cwd/.bashrc && echo reloaded bashrc"
 alias sm='f(){ markdown $1 | lynx -stdin;}; f'
 alias vm="cat $hosts_file | grep $1 --color=never"
-alias gs='git s'
-alias gl='git lg'
-alias gh='git hist'
-alias gal='git aliases'
-alias ga='git add'
-alias gc='git commit -m'
 alias g='gluster'
 alias tm="tmux -f $cwd/.tmux.conf new -s"
 alias td='tmux attach -d'
 alias tl='tmux ls'
 alias ks='kyrat'
-alias gb='git rev-parse --abbrev-ref HEAD 2>/dev/null'
-alias gr='git branch'
 alias oc='kubectl'
+
+#==== git
+
+alias gs='git s'
+alias gl='git lg'
+alias gh='git hist'
+alias gal='git aliases'
+alias gfa='git fza'         # fuzzy add
+alias gfc='git fzc'         # fuzzy checkout
+
+alias ga='git add'
+alias gb='git branch'
+alias gc='git checkout'
+alias gco='git commit'
+alias gpl='git pull'
+alias gph='git push'
 
 # }}}
 
