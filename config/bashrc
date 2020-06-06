@@ -184,3 +184,5 @@ fi
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
 
+
+[[ -s "/home/lgangava/.gvm/scripts/gvm" ]] && source "/home/lgangava/.gvm/scripts/gvm"
