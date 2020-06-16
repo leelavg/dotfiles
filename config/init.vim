@@ -48,6 +48,8 @@ function! ExtraPlugins() abort
         call minpac#add('junegunn/fzf.vim')
         call minpac#add('miyakogi/conoline.vim')
         call minpac#add('numirias/semshi', {'do': ':UpdateRemotePlugins'})
+        call minpac#add('ludovicchabant/vim-gutentags')
+        call minpac#add('skywind3000/gutentags_plus')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -139,11 +141,11 @@ nnoremap <silent> <leader>l :Lines<cr>
 nnoremap <silent> <leader>c :BCommits<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>m :Marks<cr>
+nnoremap <silent> <leader>T :BTags<cr>
+nnoremap <silent> <leader>t :Tags<cr>
 
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>rg! :Rg!<space>
-
-nnoremap <F5> :call LanguageClient_contextMenu()<cr>
 
 nmap 0 ^
 nmap <silent> <BS> :nohl<cr>
@@ -164,6 +166,9 @@ command! PackMinimal call PackInit('minimal') | call minpac#update()
 command! PackFull call PackInit('full') | call minpac#update()
 command! PackClean  call PackInit('full') | call minpac#clean()
 command! PackStatus  packadd minpac | call minpac#status()
+
+" Remove tags cache dir
+command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
 
 " }}}
 
@@ -227,5 +232,32 @@ let g:lightline = {
 \   'filename': 'LightlineFilename'
 \ }
 \ }
+
+" Gutentags
+let g:gutentags_add_default_project_roots = 0
+let g:gutentags_modules = ['ctags', 'gtags_cscope']
+let g:gutentags_project_root = ['package.json', '.git']
+let g:gutentags_cache_dir = expand('~/.cache/ctags/')
+let g:gutentags_plus_switch = 1
+let g:gutentags_generate_on_new = 1
+let g:gutentags_generate_on_missing = 1
+let g:gutentags_generate_on_write = 1
+let g:gutentags_generate_on_empty_buffer = 0
+let g:gutentags_ctags_extra_args = [
+    \ '--tag-relative=yes',
+    \ '--fields=+ailmnS',
+    \ ]
+let g:gutentags_ctags_exclude = [
+    \ '*.git', '*.svg', '*.hg', '*/tests/*', 'build', 'dist', '*sites/*/files/*',
+    \ 'bin', 'node_modules', 'bower_components', 'cache', 'compiled', 'docs',
+    \ 'example', 'bundle', 'vendor', '*.md', '*-lock.json', '*.lock',
+    \ '*bundle*.js', '*build*.js', '.*rc*', '*.json', '*.min.*', '*.map',
+    \ '*.bak', '*.zip', '*.pyc', '*.class', '*.sln', '*.Master', '*.csproj',
+    \ '*.tmp', '*.csproj.user', '*.cache', '*.pdb', 'tags*', 'cscope.*',
+    \ '*.css', '*.less', '*.scss', '*.exe', '*.dll', '*.mp3', '*.ogg',
+    \ '*.flac', '*.swp', '*.swo', '*.bmp', '*.gif', '*.ico', '*.jpg',
+    \ '*.png', '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz',
+    \ '*.tar.bz2', '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
+    \ ]
 
 " }}}
