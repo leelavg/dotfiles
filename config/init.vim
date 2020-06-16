@@ -147,8 +147,6 @@ nnoremap <silent> <leader>t :Tags<cr>
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>rg! :Rg!<space>
 
-nnoremap <F5> :call LanguageClient_contextMenu()<cr>
-
 nmap 0 ^
 nmap <silent> <BS> :nohl<cr>
 imap jk <esc>:w<cr>
