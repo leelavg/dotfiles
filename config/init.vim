@@ -50,6 +50,8 @@ function! ExtraPlugins() abort
         call minpac#add('numirias/semshi', {'do': ':UpdateRemotePlugins'})
         call minpac#add('ludovicchabant/vim-gutentags')
         call minpac#add('skywind3000/gutentags_plus')
+        call minpac#add('majutsushi/tagbar')
+        call minpac#add('mgedmin/python-imports.vim')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -134,6 +136,8 @@ map <leader>e :set cursorline!<CR>
 map <leader>p :set paste!<CR>
 nmap <leader>= :wincmd _<cr>:wincmd \|<cr>
 nmap <leader>- :wincmd =<cr>
+nmap <F8> :TagbarToggle<cr>
+map <leader>v :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
 
 nnoremap <silent> <leader>f :Files<cr>
 nnoremap <silent> <leader>g :GFiles?<cr>
@@ -153,6 +157,11 @@ imap jk <esc>:w<cr>
 imap kj <esc>:w<cr>
 nmap j gj
 nmap k gk
+
+inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
+
+map <silent> <C-i> :ImportName<cr>
 
 " }}}
 
