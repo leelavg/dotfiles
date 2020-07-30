@@ -26,7 +26,7 @@ export cwd=`[ ! -z $khome ] && echo $khome || echo $HOME`
 hosts_file=$cwd/.etc_hosts
 if command -v kubectl 1>/dev/null; then
     source <(kubectl completion bash)
-    complete -F __start_kubectl oc
+    complete -F __start_kubectl k
 fi
 
 # }}}
@@ -65,6 +65,14 @@ nv () {
 
         command $HOME/.nvim/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
     fi
+}
+
+pyc () {
+
+    printf "\n%10s Sorting imports by 'isort'\n"; isort "$@";
+    printf "\n%10s Running through 'yapf'\n"; yapf -i "$@";
+    printf "\n%10s Checking against 'flake8'\n"; flake8 "$@";
+    printf "\n%10s Errors from 'pylint'\n"; pylint --rcfile=.pylintrc "$@";
 }
 
 
@@ -138,7 +146,7 @@ alias tm="tmux -f $cwd/.tmux.conf new -s"
 alias td='tmux attach -d'
 alias tl='tmux ls'
 alias ks='kyrat'
-alias oc='kubectl'
+alias k='kubectl'
 
 #==== git
 

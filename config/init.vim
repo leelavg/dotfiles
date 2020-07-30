@@ -140,13 +140,14 @@ nmap <F8> :TagbarToggle<cr>
 map <leader>v :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
 
 nnoremap <silent> <leader>f :Files<cr>
-nnoremap <silent> <leader>g :GFiles?<cr>
+nnoremap <silent> <leader>g :GFiles<cr>
 nnoremap <silent> <leader>l :Lines<cr>
 nnoremap <silent> <leader>c :BCommits<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>m :Marks<cr>
 nnoremap <silent> <leader>T :BTags<cr>
 nnoremap <silent> <leader>t :Tags<cr>
+map <silent> <leader>i :ImportName<cr>
 
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>rg! :Rg!<space>
@@ -160,8 +161,6 @@ nmap k gk
 
 inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
-
-map <silent> <C-i> :ImportName<cr>
 
 " }}}
 
