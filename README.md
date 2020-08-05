@@ -30,15 +30,15 @@ Each config only span a single file and separated using fold markers (easy to ma
 ### Backups
 ---
 
-Currently **no** backups are provided, all configs are symlinked to ```~/.dotfiles/```and individiual configs are symlinked based on this directory. Only a log is created and the ouput on running ```setup.sh``` is mirrored in this log.
+Currently **no** backups are provided, all configs are symlinked to ```~/.dotfiles/```and individiual configs are symlinked based on this directory. Only a log is created and the ouput on running `setup.sh` is mirrored in this log.
 
 
 ### Compatibility
 ---
 
-- [x] Fedora 31
+- [x] Fedora 32
 - [x] RHEL 8
-- [x] CentOS 7
+- [x] CentOS 8
 
 ### ToDo
 ---

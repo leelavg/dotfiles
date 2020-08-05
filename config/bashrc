@@ -34,6 +34,8 @@ fi
 #====== Functions {{{
 
 fill () {
+
+    # Command to create files with random data
     for ((i = $1; i <= $2; i++));
         do
             cat /dev/urandom | tr -dc [:space:][:print:] | head -c $3 > file$i;
@@ -41,6 +43,8 @@ fill () {
 }
 
 nv () {
+
+    # Exec NeoVim with correct config files or download, configureand launch
     if command -v nvim 1>/dev/null; then
         command nvim -u $cwd/.init.vim "$@";
     else
@@ -69,10 +73,23 @@ nv () {
 
 pyc () {
 
+    # Lint and Fix python files
     printf "\n%10s Sorting imports by 'isort'\n"; isort "$@";
     printf "\n%10s Running through 'yapf'\n"; yapf -i "$@";
     printf "\n%10s Checking against 'flake8'\n"; flake8 "$@";
     printf "\n%10s Errors from 'pylint'\n"; pylint --rcfile=.pylintrc "$@";
+
+}
+
+s () {
+
+    # Use `fzf` to select and launch python virtualenv
+    if [ -d ~/toolbox ] && command -v fzf 1>/dev/null;
+    then
+        source ~/toolbox/venv/$([ ! -z $1 ] && echo $1 || echo $(ls ~/toolbox/venv | fzf))/bin/activate
+        PS1="\n${PS1-}"
+    fi
+
 }
 
 
@@ -81,7 +98,7 @@ pyc () {
 #====== Shell Options {{{
 
 set -m
-bind -x '"\C-l": clear;'
+# bind -x '"\C-l": clear;'
 shopt -s histappend
 shopt -s cmdhist
 shopt -s checkwinsize
@@ -96,7 +113,7 @@ export HISTFILESIZE=20000
 export KYRAT_HOME=~/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
 export EDITOR=vi
-export PYTHONSTARTUP=$HOME/pystartup.py
+[ -f $HOME/pystartup.py ] && export PYTHONSTARTUP=$HOME/pystartup.py
 if command -v go 1>/dev/null;
 then
     export GOPATH=$(go env GOPATH)
@@ -134,13 +151,13 @@ alias ll='ls -AlF'
 alias lt='ls -lthF'
 alias ..='cd ..'
 alias ...='cd ../..'
-alias tree='tree -C'
-alias trls='tree -C | less -R'
-alias h='hostname'
-alias p='pwd;pwd -P'
+# alias tree='tree -C'
+# alias trls='tree -C | less -R'
+# alias h='hostname'
+# alias p='pwd;pwd -P'
 alias re="source $cwd/.bashrc && echo reloaded bashrc"
-alias sm='f(){ markdown $1 | lynx -stdin;}; f'
-alias vm="cat $hosts_file | grep $1 --color=never"
+# alias sm='f(){ markdown $1 | lynx -stdin;}; f'
+alias vm="cat $hosts_file | grep -P $1 --color=never"
 alias g='gluster'
 alias tm="tmux -f $cwd/.tmux.conf new -s"
 alias td='tmux attach -d'
@@ -174,17 +191,15 @@ if [ -n "$SSH_TTY" ] || [ -n "$SSH_CLIENT" ]; then
     hname=`command -v hostname 1>/dev/null && echo $(hostname -i) | awk '{print $NF}'`
     hname=${hname:=DUMMY}
     etc_host=$(grep -P "$hname\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
-    prompt="\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]$(echo ${hname/DUMMY/\\h})
-              \[$(tput bold)$(tput setaf 4)\]$etc_host
-              \[$(tput bold)$(tput setaf 2)\]\w $PS2
-              \[$(tput bold)$(tput setaf 7)\]\n$
-              \[$(tput sgr0)\]"
-    PS1=$(echo $prompt | tr -s ' ')
+    PS1="\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]\h \[$(tput bold)$(tput setaf 4)\]$etc_host \[$(tput bold)$(tput setaf 2)\]\w $PS2\[$(tput bold)$(tput setaf 7)\]\n\\$ \[$(tput sgr0)\]"
+    # PS1=$(echo $prompt | tr -s ' ')
 else
     #-- Local
     PROMPT_DIRTRIM=2
-    PS1="\[$(tput bold)$(tput setaf 1)\]\w \[$(tput bold)$(tput setaf 7)\]$ \[$(tput sgr0)\]"
+    PS1="\[$(tput bold)$(tput setaf 1)\]\w \[$(tput bold)$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
 fi
+
+s gpy3 # Activate Gluster Python 3 virtualenv
 
 # }}}
 

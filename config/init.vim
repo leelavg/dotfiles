@@ -43,10 +43,8 @@ endfunction
 function! ExtraPlugins() abort
         call minpac#add('tpope/vim-commentary')
         call minpac#add('christoomey/vim-tmux-navigator')
-        call minpac#add('itchyny/lightline.vim')
         call minpac#add('junegunn/fzf', { 'do': { -> system('./install') }})
         call minpac#add('junegunn/fzf.vim')
-        call minpac#add('miyakogi/conoline.vim')
         call minpac#add('numirias/semshi', {'do': ':UpdateRemotePlugins'})
         call minpac#add('ludovicchabant/vim-gutentags')
         call minpac#add('skywind3000/gutentags_plus')
@@ -69,11 +67,6 @@ function! PackInit(type) abort
         call ExtraPlugins()
     endif
 
-endfunction
-
-" Lightline expand file name
-function! LightlineFilename()
-  return expand('%')
 endfunction
 
 " }}}
@@ -107,7 +100,6 @@ set inccommand=split                        " Searches in a split window
 set smartindent                             " Context awareness
 set foldmethod=marker
 set smarttab
-set ruler
 set hidden
 
 " Basic Settings for Python
@@ -130,14 +122,14 @@ syntax on                                   " syntax highlighting
 
 " All Mappings {{{
 
-map <space> <leader>
-map <leader>n :source $cwd/.init.vim<cr>
-map <leader>e :set cursorline!<CR>
-map <leader>p :set paste!<CR>
-nmap <leader>= :wincmd _<cr>:wincmd \|<cr>
-nmap <leader>- :wincmd =<cr>
-nmap <F8> :TagbarToggle<cr>
-map <leader>v :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
+map     <space>     <leader>
+map     <leader>n   :source $cwd/.init.vim<cr>
+map     <leader>e   :set cursorline!<CR>
+map     <leader>p   :set paste!<CR>
+nmap    <leader>=   :wincmd _<cr>:wincmd \|<cr>
+nmap    <leader>-   :wincmd =<cr>
+nmap    <F8>        :TagbarToggle<cr>
+map     <leader>v   :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
 
 nnoremap <silent> <leader>f :Files<cr>
 nnoremap <silent> <leader>g :GFiles<cr>
@@ -147,19 +139,19 @@ nnoremap <silent> <leader>b :Buffers<cr>
 nnoremap <silent> <leader>m :Marks<cr>
 nnoremap <silent> <leader>T :BTags<cr>
 nnoremap <silent> <leader>t :Tags<cr>
-map <silent> <leader>i :ImportName<cr>
+map      <silent> <leader>i :ImportName<cr>
 
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>rg! :Rg!<space>
 
 nmap 0 ^
-nmap <silent> <BS> :nohl<cr>
-imap jk <esc>:w<cr>
-imap kj <esc>:w<cr>
 nmap j gj
 nmap k gk
+imap jk <esc>:w<cr>
+imap kj <esc>:w<cr>
+nmap <silent> <BS> :nohl<cr>
 
-inoremap <expr> <TAB> pumvisible() ? "\<C-n>" : "\<TAB>"
+inoremap <expr> <TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
 
 " }}}
@@ -170,10 +162,11 @@ command! Q q " Bind :Q to :q
 command! Qall qall
 command! QA qall
 command! E e
-command! PackMinimal call PackInit('minimal') | call minpac#update()
-command! PackFull call PackInit('full') | call minpac#update()
-command! PackClean  call PackInit('full') | call minpac#clean()
-command! PackStatus  packadd minpac | call minpac#status()
+command! X x
+command! PackMinimal    call PackInit('minimal') | call minpac#update()
+command! PackFull       call PackInit('full') | call minpac#update()
+command! PackClean      call PackInit('full') | call minpac#clean()
+command! PackStatus     packadd minpac | call minpac#status()
 
 " Remove tags cache dir
 command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
@@ -182,13 +175,17 @@ command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir 
 
 " Aesthetics{{{
 
-highlight VertSplit cterm=NONE
+highlight VertSplit     cterm=NONE
+highlight statusline    ctermbg=white   ctermfg=magenta
+highlight search        ctermbg=white   ctermfg=red
+highlight ColorColumn   ctermbg=234
+highlight CursorLine    ctermbg=234     cterm=None
 
-if ! &rtp =~ 'lightline'
-    set showmode
-    highlight statusline ctermbg=white ctermfg=magenta
-    highlight search     ctermbg=white ctermfg=red
-endif
+" QuickScope character highlights
+highlight QuickScopePrimary     guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
+highlight QuickScopeSecondary   guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
+
+set statusline=\|CWD:%r%{getcwd()}%h\|%=\|Path:%f\|%=\|Total:%L,Line:%l,Column:%c\|
 
 " }}}
 
@@ -201,14 +198,10 @@ autocmd Filetype help nnoremap <buffer> q :q<CR>
 " Escape inside a FZF terminal window should exit the terminal window
 autocmd FileType fzf tnoremap <buffer> <Esc> <Esc>
 
-" QuickScope character highlights
-highlight QuickScopePrimary guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
-highlight QuickScopeSecondary guifg='#5fffff' gui=underline ctermfg=81 cterm=underline
-
 " Highlight Window
 augroup BgHighlight
     autocmd!
-    autocmd WinEnter * set colorcolumn=80
+    autocmd WinEnter,BufEnter * set colorcolumn=80
     autocmd WinLeave * set colorcolumn=0
 augroup END
 
@@ -221,25 +214,8 @@ let g:fzf_commits_log_options = '--graph --color=always
 \ --format="%C(yellow)%h%C(red)%d%C(reset)
 \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
 
-" Conoline
-let g:conoline_auto_enable = 1
-
 " Quickscope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
-
-" Lightline
-let g:lightline = {
-      \ 'active': {
-      \   'left': [ [ 'mode', 'paste' ], [ 'readonly', 'relativepath', 'modified' ] ]
-      \ }
-      \ }
-
-let g:lightline = {
-\ 'colorscheme': 'wombat',
-\ 'component_function': {
-\   'filename': 'LightlineFilename'
-\ }
-\ }
 
 " Gutentags
 let g:gutentags_add_default_project_roots = 0
