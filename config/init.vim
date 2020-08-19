@@ -50,6 +50,7 @@ function! ExtraPlugins() abort
         call minpac#add('skywind3000/gutentags_plus')
         call minpac#add('majutsushi/tagbar')
         call minpac#add('mgedmin/python-imports.vim')
+        call minpac#add('fatih/vim-go', { 'do': ':GoUpdateBinaries' })
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -101,14 +102,6 @@ set smartindent                             " Context awareness
 set foldmethod=marker
 set smarttab
 set hidden
-
-" Basic Settings for Python
-set tabstop=4                               " number of columns occupied by a tab character
-set softtabstop=4                           " see multiple spaces as tabstops so <BS> does the right thing
-set shiftwidth=4                            " width for autoindents
-set textwidth=79                            " Break text after reaching textwidth
-set expandtab                               " converts tabs to white space
-set autoindent                              " indent a new line the same amount as the line just typed
 set fileformat=unix
 
 " }}}
@@ -203,6 +196,17 @@ augroup BgHighlight
     autocmd!
     autocmd WinEnter,BufEnter * set colorcolumn=80
     autocmd WinLeave * set colorcolumn=0
+augroup END
+
+" Basic Settings for Python
+augroup filetype_python
+    autocmd!
+    autocmd FileType python set tabstop=4     " number of columns occupied by a tab character
+    autocmd FileType python set softtabstop=4 " see multiple spaces as tabstops so <BS> does the right thing
+    autocmd FileType python set shiftwidth=4  " width for autoindents
+    autocmd FileType python set textwidth=79  " Break text after reaching textwidth
+    autocmd FileType python set expandtab     " converts tabs to white space
+    autocmd FileType python set autoindent    " indent a new line the same amount as the line just typed
 augroup END
 
 " }}}
