@@ -207,5 +207,4 @@ s gpy3 # Activate Gluster Python 3 virtualenv
 #====== Set by Packages {{{
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-[[ -s "/home/lgangava/.gvm/scripts/gvm" ]] && source "/home/lgangava/.gvm/scripts/gvm"
 

@@ -43,7 +43,7 @@ endfunction
 function! ExtraPlugins() abort
         call minpac#add('tpope/vim-commentary')
         call minpac#add('christoomey/vim-tmux-navigator')
-        call minpac#add('junegunn/fzf', { 'do': { -> system('./install') }})
+        call minpac#add('junegunn/fzf')
         call minpac#add('junegunn/fzf.vim')
         call minpac#add('numirias/semshi', {'do': ':UpdateRemotePlugins'})
         call minpac#add('ludovicchabant/vim-gutentags')
@@ -51,6 +51,7 @@ function! ExtraPlugins() abort
         call minpac#add('majutsushi/tagbar')
         call minpac#add('mgedmin/python-imports.vim')
         call minpac#add('fatih/vim-go', { 'do': ':GoUpdateBinaries' })
+        call minpac#add('tpope/vim-fugitive')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -123,6 +124,7 @@ nmap    <leader>=   :wincmd _<cr>:wincmd \|<cr>
 nmap    <leader>-   :wincmd =<cr>
 nmap    <F8>        :TagbarToggle<cr>
 map     <leader>v   :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
+map     <leader>o   :only<cr>
 
 nnoremap <silent> <leader>f :Files<cr>
 nnoremap <silent> <leader>g :GFiles<cr>
