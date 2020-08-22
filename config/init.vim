@@ -52,6 +52,7 @@ function! ExtraPlugins() abort
         call minpac#add('mgedmin/python-imports.vim')
         call minpac#add('fatih/vim-go', { 'do': ':GoUpdateBinaries' })
         call minpac#add('tpope/vim-fugitive')
+	call minpac#add('tpope/vim-obsession')
 endfunction
 
 " Load Plugin Manager (minpac) on demand

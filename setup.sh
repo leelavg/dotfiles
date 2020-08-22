@@ -29,6 +29,7 @@ done
 # Creating required directories
 mkdir -pv $HOME/.local/share/kyrat
 git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat
+git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm
 
 echo "${SCRIPT_NAME%.sh} END"
 
