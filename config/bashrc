@@ -151,7 +151,7 @@ alias ll='ls -AlF'
 alias lt='ls -lthF'
 alias ..='cd ..'
 alias ...='cd ../..'
-alias less='less -R +F '
+alias less='less -R '
 # alias tree='tree -C'
 # alias trls='tree -C | less -R'
 # alias h='hostname'
@@ -160,7 +160,7 @@ alias re="source $cwd/.bashrc && echo reloaded bashrc"
 # alias sm='f(){ markdown $1 | lynx -stdin;}; f'
 alias vm="cat $hosts_file | grep -P $1 --color=never"
 alias g='gluster'
-alias tm="tmux -f $cwd/.tmux.conf new -s"
+alias tm="tmux -2 -f $cwd/.tmux.conf new -s"
 alias td='tmux attach -d'
 alias tl='tmux ls'
 alias ks='kyrat'

@@ -105,6 +105,7 @@ set foldmethod=marker
 set smarttab
 set hidden
 set fileformat=unix
+set cursorline
 
 " }}}
 
@@ -128,7 +129,7 @@ map     <leader>v   :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
 map     <leader>o   :only<cr>
 
 nnoremap <silent> <leader>f :Files<cr>
-nnoremap <silent> <leader>g :GFiles<cr>
+nnoremap <silent> <leader>F :GFiles<cr>
 nnoremap <silent> <leader>l :Lines<cr>
 nnoremap <silent> <leader>c :BCommits<cr>
 nnoremap <silent> <leader>b :Buffers<cr>
@@ -136,6 +137,10 @@ nnoremap <silent> <leader>m :Marks<cr>
 nnoremap <silent> <leader>T :BTags<cr>
 nnoremap <silent> <leader>t :Tags<cr>
 map      <silent> <leader>i :ImportName<cr>
+
+" vim-go bindings
+nnoremap <silent> <leader>gr :GoRun<cr>
+nnoremap <silent> <leader>gt :GoTest<cr>
 
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>rg! :Rg!<space>
@@ -250,5 +255,14 @@ let g:gutentags_ctags_exclude = [
     \ '*.png', '*.rar', '*.zip', '*.tar', '*.tar.gz', '*.tar.xz',
     \ '*.tar.bz2', '*.pdf', '*.doc', '*.docx', '*.ppt', '*.pptx',
     \ ]
+
+" vim-go
+let g:go_fmt_command = 'goimports'
+let g:go_highlight_fields = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_operators = 1
+let g:go_auto_type_info = 1
 
 " }}}
