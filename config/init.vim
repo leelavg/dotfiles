@@ -50,9 +50,11 @@ function! ExtraPlugins() abort
         call minpac#add('skywind3000/gutentags_plus')
         call minpac#add('majutsushi/tagbar')
         call minpac#add('mgedmin/python-imports.vim')
-        call minpac#add('fatih/vim-go', { 'do': ':GoUpdateBinaries' })
+        " call minpac#add('fatih/vim-go', { 'do': ':GoUpdateBinaries' })
+        call minpac#add('fatih/vim-go')
         call minpac#add('tpope/vim-fugitive')
-	call minpac#add('tpope/vim-obsession')
+        call minpac#add('tpope/vim-obsession')
+        call minpac#add('ErichDonGubler/vim-sublime-monokai')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -106,6 +108,10 @@ set smarttab
 set hidden
 set fileformat=unix
 set cursorline
+set tabstop=4                              " number of columns occupied by a tab character
+set softtabstop=4                          " see multiple spaces as tabstops so <BS> does the right thing
+set shiftwidth=4                           " width for autoindents
+set expandtab                              " converts tabs to white space
 
 " }}}
 
@@ -113,6 +119,11 @@ set cursorline
 
 filetype plugin indent on                   " allows auto-indenting depending on file type
 syntax on                                   " syntax highlighting
+
+" Colorscheme
+set termguicolors
+colorscheme sublimemonokai
+let g:sublimemonokai_term_italic = 1
 
 " }}}
 
@@ -141,6 +152,8 @@ map      <silent> <leader>i :ImportName<cr>
 " vim-go bindings
 nnoremap <silent> <leader>gr :GoRun<cr>
 nnoremap <silent> <leader>gt :GoTest<cr>
+nnoremap <silent> <leader>ga :GoAlternate<cr>
+nnoremap <silent> <leader>gi :GoImports<cr>
 
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>rg! :Rg!<space>
@@ -199,6 +212,9 @@ autocmd Filetype help nnoremap <buffer> q :q<CR>
 " Escape inside a FZF terminal window should exit the terminal window
 autocmd FileType fzf tnoremap <buffer> <Esc> <Esc>
 
+" Close quickfixlist with <esc>
+autocmd FileType qf nnoremap <silent> <buffer> <esc> :cclose<cr>
+
 " Highlight Window
 augroup BgHighlight
     autocmd!
@@ -209,11 +225,7 @@ augroup END
 " Basic Settings for Python
 augroup filetype_python
     autocmd!
-    autocmd FileType python set tabstop=4     " number of columns occupied by a tab character
-    autocmd FileType python set softtabstop=4 " see multiple spaces as tabstops so <BS> does the right thing
-    autocmd FileType python set shiftwidth=4  " width for autoindents
     autocmd FileType python set textwidth=79  " Break text after reaching textwidth
-    autocmd FileType python set expandtab     " converts tabs to white space
     autocmd FileType python set autoindent    " indent a new line the same amount as the line just typed
 augroup END
 
@@ -258,11 +270,17 @@ let g:gutentags_ctags_exclude = [
 
 " vim-go
 let g:go_fmt_command = 'goimports'
-let g:go_highlight_fields = 1
-let g:go_highlight_functions = 1
+let g:go_highlight_format_strings = 1
+let g:go_highlight_function_arguments = 1
 let g:go_highlight_function_calls = 1
-let g:go_highlight_extra_types = 1
+let g:go_highlight_functions = 1
 let g:go_highlight_operators = 1
+let g:go_highlight_types = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_variable_assignments = 1
+let g:go_highlight_variable_declarations = 1
 let g:go_auto_type_info = 1
 
 " }}}
