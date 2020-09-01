@@ -40,8 +40,10 @@ fill () {
         do
             cat /dev/urandom | tr -dc [:space:][:print:] | head -c $3 > file$i;
         done
+
 }
 
+: << 'OLD'
 nv () {
 
     # Exec NeoVim with correct config files or download, configureand launch
@@ -70,6 +72,7 @@ nv () {
         command $HOME/.nvim/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
     fi
 }
+OLD
 
 pyc () {
 
@@ -160,11 +163,12 @@ alias re="source $cwd/.bashrc && echo reloaded bashrc"
 # alias sm='f(){ markdown $1 | lynx -stdin;}; f'
 alias vm="cat $hosts_file | grep -P $1 --color=never"
 alias g='gluster'
-alias tm="tmux -2 -f $cwd/.tmux.conf new -s"
-alias td='tmux attach -d'
+alias tm="TERM=screen-256color tmux -2 -f $cwd/.tmux.conf new -s"
+alias td='TERM=screen-256color tmux attach -d'
 alias tl='tmux ls'
 alias ks='kyrat'
 alias k='kubectl'
+alias nv='nvim'
 
 #==== git
 
@@ -207,4 +211,3 @@ s gpy3 # Activate Gluster Python 3 virtualenv
 #====== Set by Packages {{{
 
 [ -f ~/.fzf.bash ] && source ~/.fzf.bash
-

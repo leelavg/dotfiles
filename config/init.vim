@@ -3,7 +3,7 @@
 
 " Path {{{
 
-set packpath^=$HOME/.nvim/
+" set packpath^=$HOME/.nvim/
 
 " }}}
 
@@ -12,19 +12,18 @@ set packpath^=$HOME/.nvim/
 " Install minpac
 function! InstallMinpac() abort
 
-    call mkdir($HOME.'/.nvim', 'p')
-    if !isdirectory($HOME.'/.nvim/pack')
+    if !isdirectory($HOME.'/.config/nvim/pack')
         if !exists('*minpac#init')
-            if !executable('git')
-                " Install git
-                :echo '..... Installing git command line utility .....'
-                :silent !yum -y install git &>/dev/null
-                :echo '..... Installed git command line utility .....'
-            endif
+            " if !executable('git')
+            "     " Install git
+            "     :echo '..... Installing git command line utility .....'
+            "     :silent !yum -y install git &>/dev/null
+            "     :echo '..... Installed git command line utility .....'
+            " endif
 
             " Install minpac
-            call mkdir($HOME.'/.nvim/pack/minpac/opt/minpac', 'p')
-            :silent !cd $HOME/.nvim/pack/minpac/opt/ && git clone https://github.com/k-takata/minpac.git 2>/dev/null
+            call mkdir($HOME.'/.config/nvim/pack/minpac/opt/', 'p')
+            :silent !cd $HOME/.config/nvim/pack/minpac/opt/ && git clone https://github.com/k-takata/minpac.git 2>/dev/null
         endif
     endif
 
@@ -45,16 +44,15 @@ function! ExtraPlugins() abort
         call minpac#add('christoomey/vim-tmux-navigator')
         call minpac#add('junegunn/fzf')
         call minpac#add('junegunn/fzf.vim')
-        call minpac#add('numirias/semshi', {'do': ':UpdateRemotePlugins'})
+        call minpac#add('numirias/semshi')
         call minpac#add('ludovicchabant/vim-gutentags')
         call minpac#add('skywind3000/gutentags_plus')
         call minpac#add('majutsushi/tagbar')
         call minpac#add('mgedmin/python-imports.vim')
-        " call minpac#add('fatih/vim-go', { 'do': ':GoUpdateBinaries' })
         call minpac#add('fatih/vim-go')
         call minpac#add('tpope/vim-fugitive')
         call minpac#add('tpope/vim-obsession')
-        call minpac#add('ErichDonGubler/vim-sublime-monokai')
+        call minpac#add('crusoexia/vim-monokai')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -119,11 +117,6 @@ set expandtab                              " converts tabs to white space
 
 filetype plugin indent on                   " allows auto-indenting depending on file type
 syntax on                                   " syntax highlighting
-
-" Colorscheme
-set termguicolors
-colorscheme sublimemonokai
-let g:sublimemonokai_term_italic = 1
 
 " }}}
 
@@ -190,10 +183,10 @@ command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir 
 " Aesthetics{{{
 
 highlight VertSplit     cterm=NONE
-highlight statusline    ctermbg=white   ctermfg=magenta
-highlight search        ctermbg=white   ctermfg=red
-highlight ColorColumn   ctermbg=234
-highlight CursorLine    ctermbg=234     cterm=None
+" highlight statusline    ctermbg=white   ctermfg=magenta
+" highlight search        ctermbg=white   ctermfg=red
+" highlight ColorColumn   ctermbg=234
+" highlight CursorLine    ctermbg=234     cterm=None
 
 " QuickScope character highlights
 highlight QuickScopePrimary     guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
@@ -281,6 +274,9 @@ let g:go_highlight_fields = 1
 let g:go_highlight_generate_tags = 1
 let g:go_highlight_variable_assignments = 1
 let g:go_highlight_variable_declarations = 1
-let g:go_auto_type_info = 1
+
+" Colorscheme
+set termguicolors
+colorscheme monokai
 
 " }}}
