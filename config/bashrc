@@ -185,6 +185,7 @@ alias gc='git checkout'
 alias gco='git commit'
 alias gpl='git pull'
 alias gph='git push'
+alias gd='git diff'
 
 # }}}
 

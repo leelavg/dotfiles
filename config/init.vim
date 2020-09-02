@@ -148,8 +148,12 @@ nnoremap <silent> <leader>gt :GoTest<cr>
 nnoremap <silent> <leader>ga :GoAlternate<cr>
 nnoremap <silent> <leader>gi :GoImports<cr>
 
+" Ripgrep
 nnoremap <leader>rg :Rg<space>
 nnoremap <leader>rg! :Rg!<space>
+
+" Lua bindings
+map <silent> <leader>a :luafile %<cr>
 
 nmap 0 ^
 nmap j gj
