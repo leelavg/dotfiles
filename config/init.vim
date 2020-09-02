@@ -72,6 +72,12 @@ function! PackInit(type) abort
 
 endfunction
 
+" Show colors
+function! <SID>SynGroup()
+    let l:s = synID(line('.'), col('.'), 1)
+    echo synIDattr(l:s, 'name') . ' -> ' . synIDattr(synIDtrans(l:s), 'name')
+endfun
+
 " }}}
 
 " Set Commands {{{
@@ -154,6 +160,10 @@ nnoremap <leader>rg! :Rg!<space>
 
 " Lua bindings
 map <silent> <leader>a :luafile %<cr>
+
+" Colors
+" :so $VIMRUNTIME/syntax/hitest.vim
+nmap <leader>s :call <SID>SynGroup()<cr>
 
 nmap 0 ^
 nmap j gj
@@ -282,5 +292,6 @@ let g:go_highlight_variable_declarations = 1
 " Colorscheme
 set termguicolors
 colorscheme monokai
+highlight String guifg=#dea18a
 
 " }}}
