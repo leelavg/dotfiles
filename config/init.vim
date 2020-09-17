@@ -111,7 +111,6 @@ set foldmethod=marker
 set smarttab
 set hidden
 set fileformat=unix
-set cursorline
 set tabstop=4                              " number of columns occupied by a tab character
 set softtabstop=4                          " see multiple spaces as tabstops so <BS> does the right thing
 set shiftwidth=4                           " width for autoindents
@@ -225,8 +224,8 @@ autocmd FileType qf nnoremap <silent> <buffer> <esc> :cclose<cr>
 " Highlight Window
 augroup BgHighlight
     autocmd!
-    autocmd WinEnter,BufEnter * set colorcolumn=80
-    autocmd WinLeave * set colorcolumn=0
+    autocmd WinEnter,BufEnter * set colorcolumn=80 cursorline
+    autocmd WinLeave * set colorcolumn=0 nocursorline
 augroup END
 
 " Basic Settings for Python
