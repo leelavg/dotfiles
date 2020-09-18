@@ -163,6 +163,7 @@ alias re="source $cwd/.bashrc && echo reloaded bashrc"
 # alias sm='f(){ markdown $1 | lynx -stdin;}; f'
 alias vm="cat $hosts_file | grep -P $1 --color=never"
 alias g='gluster'
+alias gm='gluster-mountbroker'
 alias tm="TERM=screen-256color tmux -2 -f $cwd/.tmux.conf new -s"
 alias td='TERM=screen-256color tmux attach -d'
 alias tl='tmux ls'

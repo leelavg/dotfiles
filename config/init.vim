@@ -233,6 +233,8 @@ augroup filetype_python
     autocmd!
     autocmd FileType python set textwidth=79  " Break text after reaching textwidth
     autocmd FileType python set autoindent    " indent a new line the same amount as the line just typed
+    autocmd Filetype python :iabbrev <buffer> sat self.assertTrue()<left>
+    autocmd Filetype python :iabbrev <buffer> sae self.assertEqual()<left>
 augroup END
 
 " }}}
