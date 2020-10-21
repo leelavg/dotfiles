@@ -42,7 +42,6 @@ endfunction
 function! ExtraPlugins() abort
         call minpac#add('tpope/vim-commentary')
         call minpac#add('christoomey/vim-tmux-navigator')
-        call minpac#add('junegunn/fzf')
         call minpac#add('junegunn/fzf.vim')
         call minpac#add('numirias/semshi')
         call minpac#add('ludovicchabant/vim-gutentags')
