@@ -215,4 +215,4 @@ s gpy3 # Activate Gluster Python 3 virtualenv
 #====== Set by Packages {{{
 
 # If `fzf` is installed using a package manager (dnf) key bindings has to be sourced separately
-[ -d /usr/share/fzf/shell ] && source /usr/share/fzf/shell/key-bindings.$(ps h -o command $(echo $$) | awk -F'/' '{print $NF}')
+[ -d /usr/share/fzf/shell ] && source /usr/share/fzf/shell/key-bindings.$(ps h -o command $(echo $$) | awk -F'/' '{sub(/^-/,""); print $NF}')
