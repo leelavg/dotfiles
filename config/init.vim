@@ -236,6 +236,14 @@ augroup filetype_python
     autocmd Filetype python :iabbrev <buffer> sae self.assertEqual()<left>
 augroup END
 
+" Basic Setting for YAML
+augroup filetype_yaml
+    autocmd!
+    autocmd FileType yaml set ts=2 sts=2 sw=2 expandtab indentkeys-=0#
+    autocmd FileType yaml set indentkeys-=<:> foldmethod=indent nofoldenable
+augroup END
+
+
 " }}}
 
 " Variable Modifications {{{
