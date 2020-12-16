@@ -1,36 +1,6 @@
 # Filename:     bashrc
 # Github:       https://github.com/leelavg/dotfiles
 
-#====== Defaults {{{
-
-# Source global definitions
-if [ -f /etc/bashrc ]; then
-        . /etc/bashrc
-fi
-
-# User specific environment
-if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
-then
-    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
-fi
-export PATH
-
-# Uncomment the following line if you don't like systemctl's auto-paging feature:
-# export SYSTEMD_PAGER=
-
-# }}}
-
-#====== Globals {{{
-
-export cwd=`[ ! -z $khome ] && echo $khome || echo $HOME`
-hosts_file=$cwd/.etc_hosts
-if command -v kubectl 1>/dev/null; then
-    source <(kubectl completion bash)
-    complete -F __start_kubectl k
-fi
-
-# }}}
-
 #====== Functions {{{
 
 fill () {
@@ -39,6 +9,7 @@ fill () {
     for ((i = $1; i <= $2; i++));
         do
             cat /dev/urandom | tr -dc [:space:][:print:] | head -c $3 > file$i;
+            sleep ${4:-0};
         done
 
 }
@@ -95,8 +66,44 @@ s () {
 
 }
 
+pathadd() {
+    if [ -d "$1" ] && [[ ":$PATH:" != *":$1:"* ]]; then
+        PATH="${PATH:+"$PATH:"}$1"
+    fi
+}
 
 # }}}
+
+#====== Defaults {{{
+
+# Source global definitions
+if [ -f /etc/bashrc ]; then
+        . /etc/bashrc
+fi
+
+# User specific environment
+if ! [[ "$PATH" =~ "$HOME/.local/bin:$HOME/bin:" ]]
+then
+    PATH="$HOME/.local/bin:$HOME/bin:$PATH"
+fi
+export PATH
+
+# Uncomment the following line if you don't like systemctl's auto-paging feature:
+# export SYSTEMD_PAGER=
+
+# }}}
+
+#====== Globals {{{
+
+export cwd=`[ ! -z $khome ] && echo $khome || echo $HOME`
+hosts_file=$cwd/.etc_hosts
+if command -v kubectl 1>/dev/null; then
+    source <(kubectl completion bash)
+    complete -F __start_kubectl k
+fi
+
+# }}}
+
 
 #====== Shell Options {{{
 
@@ -114,13 +121,20 @@ export HISTCONTROL=ignoreboth:erasedups
 export HISTSIZE=10000
 export HISTFILESIZE=20000
 export KYRAT_HOME=~/.dotfiles
-[ -d ~/.local/share/kyrat/bin ] && export PATH=$PATH:~/.local/share/kyrat/bin
+[ -d ~/.local/share/kyrat/bin ] && pathadd ~/.local/share/kyrat/bin
 export EDITOR=vi
 [ -f $HOME/pystartup.py ] && export PYTHONSTARTUP=$HOME/pystartup.py
 if command -v go 1>/dev/null;
 then
     export GOPATH=$(go env GOPATH)
-    export PATH=$PATH:$(go env GOPATH)/bin
+    pathadd $(go env GOPATH)/bin
+fi
+
+if [ -d ~/toolbox/venv ]
+then
+    export WORKON_HOME=$HOME/toolbox/venv
+    export VIRTUALENVWRAPPER_SCRIPT=/usr/local/bin/virtualenvwrapper.sh
+    source /usr/local/bin/virtualenvwrapper_lazy.sh
 fi
 
 # }}}
@@ -172,6 +186,7 @@ alias k='kubectl'
 alias nv='nvim'
 # File Preview
 alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
+alias op='openstack'
 
 #==== git
 
@@ -208,7 +223,7 @@ else
     PS1="\[$(tput bold)$(tput setaf 1)\]\w \[$(tput bold)$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
 fi
 
-s gpy3 # Activate Gluster Python 3 virtualenv
+# s gpy3 # Activate Gluster Python 3 virtualenv (No longer needed, moved to virtualenvwrapper)
 
 # }}}
 

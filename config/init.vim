@@ -52,6 +52,7 @@ function! ExtraPlugins() abort
         call minpac#add('tpope/vim-fugitive')
         call minpac#add('tpope/vim-obsession')
         call minpac#add('crusoexia/vim-monokai')
+        call minpac#add('pprovost/vim-ps1')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
