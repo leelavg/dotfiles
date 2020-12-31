@@ -26,12 +26,30 @@ do
     ln -sfv $HOME/.dotfiles/$file $HOME/.$file
 done
 
-
 # Creating required directories
 mkdir -pv $HOME/.local/share/kyrat
 mkdir -pv $HOME/.config/nvim && ln -sfv $HOME/.init.vim $HOME/.config/nvim/init.vim
 git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat &> /dev/null
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &> /dev/null
+ln -sfv $HOME/.local/share/kyrat $HOME/.dotfiles/
+
+# Install required binaries
+bins=@(konsole virt-manager fzf neovim bat)
+for bin in ${bins[@]};
+do
+    if ! command -v $bin;
+    then
+        sudo dnf install $bin
+    fi
+done
+
+# Install Python provider for NeoVim
+if ! grep pynvim <<< $(pip list);
+then
+    pip install pynvim --user
+fi
+
+# TODO: Run `packfull` and `updateremoteplugins` on neovim start up
 
 echo "${SCRIPT_NAME%.sh} END"
 
