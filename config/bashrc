@@ -186,6 +186,9 @@ alias nv='nvim'
 # File Preview
 alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 alias op='openstack'
+# VPN
+alias nu='nmcli -g name,uuid,type c | fzf | cut -d: -f2 | xargs -I uuid nmcli c up uuid -a'
+alias nd='nmcli -g name,uuid,type c s --active | grep vpn | cut -d: -f2 | xargs -I uuid nmcli c down uuid'
 
 #==== git
 

@@ -53,6 +53,7 @@ function! ExtraPlugins() abort
         call minpac#add('tpope/vim-obsession')
         call minpac#add('crusoexia/vim-monokai')
         call minpac#add('pprovost/vim-ps1')
+        call minpac#add('prettier/vim-prettier')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -128,15 +129,16 @@ syntax on                                   " syntax highlighting
 
 " All Mappings {{{
 
-map     <space>     <leader>
-map     <leader>n   :source $cwd/.init.vim<cr>
-map     <leader>e   :set cursorline!<CR>
-map     <leader>p   :set paste!<CR>
-nmap    <leader>=   :wincmd _<cr>:wincmd \|<cr>
-nmap    <leader>-   :wincmd =<cr>
-nmap    <F8>        :TagbarToggle<cr>
-map     <leader>v   :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
-map     <leader>o   :only<cr>
+map              <space>     <leader>
+map     <silent> <leader>n   :source $cwd/.init.vim<cr>
+map     <silent> <leader>e   :set cursorline!<CR>
+map     <silent> <leader>p   :set paste!<CR>
+nmap    <silent> <leader>=   :wincmd _<cr>:wincmd \|<cr>
+nmap    <silent> <leader>-   :wincmd =<cr>
+nmap    <silent> <F8>        :TagbarToggle<cr>
+map     <silent> <leader>v   :vsp <cr>:exec("tag ".expand("<cword>"))<cr>
+map     <silent> <leader>o   :only<cr>
+nmap    <silent> <leader>u   :set rnu! nu!<cr>
 
 nnoremap <silent> <leader>f :Files<cr>
 nnoremap <silent> <leader>F :GFiles<cr>
@@ -160,6 +162,9 @@ nnoremap <leader>rg! :Rg!<space>
 
 " Lua bindings
 map <silent> <leader>a :luafile %<cr>
+
+" Prettier JS
+nmap <leader>pr :PrettierAsync %<cr>
 
 " Colors
 " :so $VIMRUNTIME/syntax/hitest.vim
