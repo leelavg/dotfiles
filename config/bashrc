@@ -232,4 +232,4 @@ fi
 #====== Set by Packages {{{
 
 # If `fzf` is installed using a package manager (dnf) key bindings has to be sourced separately
-[ -d /usr/share/fzf/shell ] && source /usr/share/fzf/shell/key-bindings.$(ps h -o command $(echo $$) | awk -F'/' '{sub(/^-/,""); print $NF}')
+[ -d /usr/share/fzf/shell ] && source /usr/share/fzf/shell/key-bindings.$(basename $SHELL)
