@@ -50,6 +50,8 @@ pyc () {
     # Lint and Fix python files
     printf "\n%10s Sorting imports by 'isort'\n"; isort "$@";
     printf "\n%10s Running through 'yapf'\n"; yapf -i "$@";
+    printf "\n%10s Remove unused vars/imports by 'autoflake'\n"; autoflake \
+    --in-place --remove-unused-variables --remove-all-unused-imports "$@";
     printf "\n%10s Checking against 'flake8'\n"; flake8 "$@";
     printf "\n%10s Errors from 'pylint'\n"; pylint --rcfile=.pylintrc "$@";
 
@@ -181,7 +183,6 @@ alias tm="TERM=screen-256color tmux -2 -f $cwd/.tmux.conf new -s"
 alias td='TERM=screen-256color tmux attach -d'
 alias tl='tmux ls'
 alias ks='kyrat'
-alias k='kubectl'
 alias nv='nvim'
 # File Preview
 alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
@@ -191,7 +192,6 @@ alias nu='nmcli -g name,uuid,type c | fzf | cut -d: -f2 | xargs -I uuid nmcli c 
 alias nd='nmcli -g name,uuid,type c s --active | grep vpn | cut -d: -f2 | xargs -I uuid nmcli c down uuid'
 
 #==== git
-
 alias gs='git s'
 alias gl='git lg'
 alias gh='git hist'
@@ -206,6 +206,18 @@ alias gco='git commit'
 alias gpl='git pull'
 alias gph='git push'
 alias gd='git diff'
+
+#===== Orchestration
+alias k='kubectl'
+alias kx='kubectx'
+alias kn='kubens'
+
+#===== Docker
+alias dl='docker ps -l -q'
+alias dp='docker ps -a'
+alias dre='docker rm $(docker ps -a -q)'
+alias drd='docker rmi $(docker images -f "dangling=true" -q)'
+alias did='docker images --format "{{.Repository}}:{{.Tag}}:{{.ID}}" | fzf | cut -d: -f3 | xargs -I id docker rmi id'
 
 # }}}
 
