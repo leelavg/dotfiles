@@ -54,6 +54,7 @@ function! ExtraPlugins() abort
         call minpac#add('crusoexia/vim-monokai')
         call minpac#add('pprovost/vim-ps1')
         call minpac#add('prettier/vim-prettier')
+        call minpac#add('itspriddle/vim-shellcheck')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -180,6 +181,13 @@ nmap <silent> <BS> :nohl<cr>
 inoremap <expr> <TAB>   pumvisible() ? "\<C-n>" : "\<TAB>"
 inoremap <expr> <S-TAB> pumvisible() ? "\<C-p>" : "\<TAB>"
 
+" Use jumplist in place of changelist
+nnoremap <silent> g; <C-o>
+nnoremap <silent> g, <C-i>
+
+" ShellCheck in QuickFix window
+nnoremap <silent> gb :ShellCheck! <cr>
+
 " }}}
 
 " Command Aliases {{{
@@ -217,15 +225,21 @@ set statusline=\|CWD:%r%{getcwd()}%h\|%=\|Path:%f\|%=\|Total:%L,Line:%l,Column:%
 
 " Autocommands {{{
 
-" Rebalance windows on vim resize
-autocmd VimResized * :wincmd =
-autocmd Filetype help nnoremap <buffer> q :q<CR>
+augroup AdhocSettings
+    autocmd!
+    " Rebalance windows on vim resize
+    autocmd VimResized * :wincmd =
+    autocmd Filetype help nnoremap <buffer> q :q<CR>
 
-" Escape inside a FZF terminal window should exit the terminal window
-autocmd FileType fzf tnoremap <buffer> <Esc> <Esc>
+    " Escape inside a FZF terminal window should exit the terminal window
+    autocmd FileType fzf tnoremap <buffer> <Esc> <Esc>
 
-" Close quickfixlist with <esc>
-autocmd FileType qf nnoremap <silent> <buffer> <esc> :cclose<cr>
+    " Close quickfixlist with <esc>
+    autocmd FileType qf nnoremap <silent> <buffer> <esc> :cclose<cr>
+
+    " Maybe inconsistent but better than inbuilt
+    autocmd BufNewFile,BufRead Dockerfile* set syntax=ruby
+augroup END
 
 " Highlight Window
 augroup BgHighlight
@@ -241,11 +255,13 @@ augroup filetype_python
     autocmd FileType python set autoindent    " indent a new line the same amount as the line just typed
     autocmd Filetype python :iabbrev <buffer> sat self.assertTrue()<left>
     autocmd Filetype python :iabbrev <buffer> sae self.assertEqual()<left>
+    autocmd Filetype python set foldmethod=indent foldnestmax=2 nofoldenable
 augroup END
 
 " Basic Setting for YAML
 augroup filetype_yaml
     autocmd!
+    autocmd BufNewFile,BufRead *yaml* set filetype=yaml
     autocmd FileType yaml set ts=2 sts=2 sw=2 expandtab indentkeys-=0#
     autocmd FileType yaml set indentkeys-=<:> foldmethod=indent nofoldenable
 augroup END
