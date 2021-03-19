@@ -43,6 +43,17 @@ nv () {
         command $HOME/.nvim/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
     fi
 }
+
+s () {
+
+    # Use `fzf` to select and launch python virtualenv
+    if [ -d ~/toolbox ] && command -v fzf 1>/dev/null;
+    then
+        source ~/toolbox/venv/$([ ! -z $1 ] && echo $1 || echo $(ls ~/toolbox/venv | fzf))/bin/activate
+        PS1="\n${PS1-}"
+    fi
+
+}
 OLD
 
 pyc () {
@@ -54,17 +65,6 @@ pyc () {
     --in-place --remove-unused-variables --remove-all-unused-imports "$@";
     printf "\n%10s Checking against 'flake8'\n"; flake8 "$@";
     printf "\n%10s Errors from 'pylint'\n"; pylint --rcfile=.pylintrc "$@";
-
-}
-
-s () {
-
-    # Use `fzf` to select and launch python virtualenv
-    if [ -d ~/toolbox ] && command -v fzf 1>/dev/null;
-    then
-        source ~/toolbox/venv/$([ ! -z $1 ] && echo $1 || echo $(ls ~/toolbox/venv | fzf))/bin/activate
-        PS1="\n${PS1-}"
-    fi
 
 }
 
@@ -102,10 +102,6 @@ hosts_file=$cwd/.etc_hosts
 hname=`command -v hostname 1>/dev/null && echo $(hostname -i) | awk '{print $NF}'`
 hname=${hname:=DUMMY}
 etc_host=$(grep -P "$hname\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
-if command -v kubectl 1>/dev/null; then
-    source <(kubectl completion bash)
-    complete -F __start_kubectl k
-fi
 
 # }}}
 
@@ -275,6 +271,7 @@ function set_ps1() {
     fi
 
     echo "$prompt"
+
 }
 
 PS1=$(set_ps1)
