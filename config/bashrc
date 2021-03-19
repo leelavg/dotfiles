@@ -99,6 +99,9 @@ export PATH
 
 export cwd=`[ ! -z $khome ] && echo $khome || echo $HOME`
 hosts_file=$cwd/.etc_hosts
+hname=`command -v hostname 1>/dev/null && echo $(hostname -i) | awk '{print $NF}'`
+hname=${hname:=DUMMY}
+etc_host=$(grep -P "$hname\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
 if command -v kubectl 1>/dev/null; then
     source <(kubectl completion bash)
     complete -F __start_kubectl k
@@ -223,22 +226,58 @@ alias did='docker images --format "{{.Repository}}:{{.Tag}}:{{.ID}}" | fzf | cut
 # }}}
 
 #====== Prompt [https://linux.101hacks.com/ps1-examples/prompt-color-using-tput/] {{{
+# Colors
+cyan='\[$(tput bold)$(tput setaf 6)\]'
+green='\[$(tput bold)$(tput setaf 2)\]'
+red='\[$(tput bold)$(tput setaf 1)\]'
+blue='\[$(tput bold)$(tput setaf 4)\]'
+yellow='\[$(tput bold)$(tput setaf 3)\]'
+magenta='\[$(tput bold)$(tput setaf 5)\]'
+white='\[$(tput bold)$(tput setaf 7)\]'
+end='\[$(tput sgr0)\]'
 
+function in_git(){
+    if $(git rev-parse --is-inside-work-tree 2> /dev/null); then
+        return 0
+    fi
+    return 1
+}
 
-if [ -n "$SSH_TTY" ] || [ -n "$SSH_CLIENT" ]; then
-    #-- Remote
-    hname=`command -v hostname 1>/dev/null && echo $(hostname -i) | awk '{print $NF}'`
-    hname=${hname:=DUMMY}
-    etc_host=$(grep -P "$hname\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
-    PS1="\n\[$(tput bold)$(tput setaf 6)\]\u@\[$(tput bold)$(tput setaf 1)\]\h \[$(tput bold)$(tput setaf 4)\]$etc_host \[$(tput bold)$(tput setaf 2)\]\w $PS2\[$(tput bold)$(tput setaf 7)\]\n\\$ \[$(tput sgr0)\]"
-    # PS1=$(echo $prompt | tr -s ' ')
-else
-    #-- Local
-    PROMPT_DIRTRIM=2
-    PS1="\[$(tput bold)$(tput setaf 1)\]\w \[$(tput bold)$(tput setaf 7)\]\\$ \[$(tput sgr0)\]"
-fi
+function get_branch(){
+    echo "$(git branch --show-current 2>/dev/null)"
+}
 
-# s gpy3 # Activate Gluster Python 3 virtualenv (No longer needed, moved to virtualenvwrapper)
+function get_dirty(){
+    dirty=''
+    if [ -n "$(git status -s)" ]; then
+        dirty='⚫'
+    fi
+    echo "$dirty"
+}
+
+function get_git(){
+    if in_git; then
+        echo "[$(echo $(in_git && get_branch && get_dirty))]"
+    else
+        echo ''
+    fi
+}
+
+function set_ps1() {
+
+    if [ -n "$SSH_TTY" ] || [ -n "$SSH_CLIENT" ]; then
+        #-- Remote
+        prompt="\n$cyan\u@$red\h $green$etc_host $blue\w $yellow\$(get_git) $magenta\$PS2\n$white\\$ $end"
+    else
+        #-- Local
+        PROMPT_DIRTRIM=2
+        prompt="\n$blue\w $yellow\$(get_git) $white\\$ $end"
+    fi
+
+    echo "$prompt"
+}
+
+PS1=$(set_ps1)
 
 # }}}
 
