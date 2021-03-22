@@ -253,7 +253,7 @@ function get_dirty(){
 
 function get_git(){
     if in_git; then
-        echo "[$(echo $(in_git && get_branch && get_dirty))]"
+        echo " [$(echo $(in_git && get_branch && get_dirty))]"
     else
         echo ''
     fi
@@ -263,11 +263,11 @@ function set_ps1() {
 
     if [ -n "$SSH_TTY" ] || [ -n "$SSH_CLIENT" ]; then
         #-- Remote
-        prompt="\n$cyan\u@$red\h $green$etc_host $blue\w $yellow\$(get_git) $magenta\$PS2\n$white\\$ $end"
+        prompt="\n$cyan\u@$red\h $green$etc_host $blue\w$yellow\$(get_git) $magenta\$PS2\n$white\\$ $end"
     else
         #-- Local
         PROMPT_DIRTRIM=2
-        prompt="\n$blue\w $yellow\$(get_git) $white\\$ $end"
+        prompt="\n$blue\w$yellow\$(get_git) $magenta\$PS2\n$white\\$ $end"
     fi
 
     echo "$prompt"
