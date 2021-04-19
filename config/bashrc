@@ -5,12 +5,22 @@
 
 fill () {
 
-    # Command to create files with random data
-    for ((i = $1; i <= $2; i++));
-        do
-            cat /dev/urandom | tr -dc [:space:][:print:] | head -c $3 > file$i;
-            sleep ${4:-0};
-        done
+    # Command to generate simple IO with random data
+    echo
+    for ((i = $1; i <= $2; i++))
+    do
+        # Create a file
+        cat /dev/urandom | tr -dc [:space:][:print:] | head -c $3 > file$i
+        # Symlinks and hard links
+        ln -srf file$i file_s$i
+        ln -f file_s$i file_sh$i
+        ln -f file$i file_oh$i
+        echo file$i is created, symlinked and hardlinked successfully
+        sleep ${4:-0};
+    done
+    # Stat all the files
+    stat file*
+    echo $2 files are created in $(pwd) directory
 
 }
 
