@@ -48,13 +48,13 @@ function! ExtraPlugins() abort
         call minpac#add('skywind3000/gutentags_plus')
         call minpac#add('majutsushi/tagbar')
         call minpac#add('mgedmin/python-imports.vim')
-        call minpac#add('fatih/vim-go')
+        " call minpac#add('fatih/vim-go')
         call minpac#add('tpope/vim-fugitive')
         call minpac#add('tpope/vim-obsession')
         call minpac#add('crusoexia/vim-monokai')
         call minpac#add('pprovost/vim-ps1')
         call minpac#add('prettier/vim-prettier')
-        call minpac#add('itspriddle/vim-shellcheck')
+        call minpac#add('alaviss/nim.nvim')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -152,10 +152,10 @@ nnoremap <silent> <leader>t :Tags<cr>
 map      <silent> <leader>i :ImportName<cr>
 
 " vim-go bindings
-nnoremap <silent> <leader>gr :GoRun<cr>
-nnoremap <silent> <leader>gt :GoTest<cr>
-nnoremap <silent> <leader>ga :GoAlternate<cr>
-nnoremap <silent> <leader>gi :GoImports<cr>
+" nnoremap <silent> <leader>gr :GoRun<cr>
+" nnoremap <silent> <leader>gt :GoTest<cr>
+" nnoremap <silent> <leader>ga :GoAlternate<cr>
+" nnoremap <silent> <leader>gi :GoImports<cr>
 
 " Ripgrep
 nnoremap <leader>rg :Rg<space>
@@ -266,6 +266,9 @@ augroup filetype_yaml
     autocmd FileType yaml set indentkeys-=<:> foldmethod=indent nofoldenable
 augroup END
 
+" LSP/Linters/Autocompletion settions
+augroup completion
+augroup END
 
 " }}}
 
@@ -307,18 +310,18 @@ let g:gutentags_ctags_exclude = [
     \ ]
 
 " vim-go
-let g:go_fmt_command = 'goimports'
-let g:go_highlight_format_strings = 1
-let g:go_highlight_function_arguments = 1
-let g:go_highlight_function_calls = 1
-let g:go_highlight_functions = 1
-let g:go_highlight_operators = 1
-let g:go_highlight_types = 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_fields = 1
-let g:go_highlight_generate_tags = 1
-let g:go_highlight_variable_assignments = 1
-let g:go_highlight_variable_declarations = 1
+" let g:go_fmt_command = 'goimports'
+" let g:go_highlight_format_strings = 1
+" let g:go_highlight_function_arguments = 1
+" let g:go_highlight_function_calls = 1
+" let g:go_highlight_functions = 1
+" let g:go_highlight_operators = 1
+" let g:go_highlight_types = 1
+" let g:go_highlight_extra_types = 1
+" let g:go_highlight_fields = 1
+" let g:go_highlight_generate_tags = 1
+" let g:go_highlight_variable_assignments = 1
+" let g:go_highlight_variable_declarations = 1
 
 " Colorscheme
 set termguicolors
