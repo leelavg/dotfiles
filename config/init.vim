@@ -239,6 +239,9 @@ augroup AdhocSettings
 
     " Maybe inconsistent but better than inbuilt
     autocmd BufNewFile,BufRead Dockerfile* set syntax=ruby
+
+    " Unset foldmethod for Nim files
+    autocmd FileType nim set foldmethod=manual
 augroup END
 
 " Highlight Window
