@@ -269,8 +269,10 @@ augroup filetype_yaml
     autocmd FileType yaml set indentkeys-=<:> foldmethod=indent nofoldenable
 augroup END
 
-" LSP/Linters/Autocompletion settions
+" Setting for Nim
 augroup completion
+    autocmd!
+    autocmd FileType nim nnoremap <silent> <leader>nr :make -r --out:/tmp/nim-cache<cr>
 augroup END
 
 " }}}

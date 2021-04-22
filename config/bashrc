@@ -24,48 +24,6 @@ fill () {
 
 }
 
-: << 'OLD'
-nv () {
-
-    # Exec NeoVim with correct config files or download, configureand launch
-    if command -v nvim 1>/dev/null; then
-        command nvim -u $cwd/.init.vim "$@";
-    else
-        if [ ! -e $HOME/.nvim/nvim.appimage ]; then
-            mkdir -p $HOME/.nvim && cd "$_";
-            echo '..... Downloading NeoVim AppImage .....';
-            curl -LO \
-            https://github.com/neovim/neovim/releases/download/stable/nvim.appimage \
-            &>/dev/null;
-            echo '..... Downloaded NeoVim AppImage .....';
-            cd - 1>/dev/null;
-        fi
-
-        if [ -e $HOME/.nvim/nvim.appimage ] && [ ! -d $HOME/.nvim/squashfs-root ]; then
-            cd $HOME/.nvim;
-            echo '..... Extracting NeoVim AppImage .....';
-            chmod u+x nvim.appimage && ./nvim.appimage --appimage-extract 1>/dev/null;
-            echo '..... Extracted NeoVim AppImage .....';
-            cd - 1>/dev/null;
-            echo '..... Opening NeoVim .....' && sleep 1;
-        fi
-
-        command $HOME/.nvim/squashfs-root/usr/bin/nvim -u $cwd/.init.vim "$@";
-    fi
-}
-
-s () {
-
-    # Use `fzf` to select and launch python virtualenv
-    if [ -d ~/toolbox ] && command -v fzf 1>/dev/null;
-    then
-        source ~/toolbox/venv/$([ ! -z $1 ] && echo $1 || echo $(ls ~/toolbox/venv | fzf))/bin/activate
-        PS1="\n${PS1-}"
-    fi
-
-}
-OLD
-
 pyc () {
 
     # Lint and Fix python files
