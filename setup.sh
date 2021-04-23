@@ -29,7 +29,7 @@ done
 # Creating required directories
 mkdir -pv $HOME/.local/share/kyrat
 mkdir -pv $HOME/.config/nvim && ln -sfv $HOME/.init.vim $HOME/.config/nvim/init.vim
-git clone https://github.com/leelavg/kyrat $HOME/.local/share/kyrat &> /dev/null
+git clone https://github.com/leelavg/kyrat --branch fork $HOME/.local/share/kyrat &> /dev/null
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &> /dev/null
 ln -sfv $HOME/.local/share/kyrat $HOME/.dotfiles/
 
@@ -39,7 +39,7 @@ for bin in ${bins[@]};
 do
     if ! command -v $bin;
     then
-        sudo dnf install $bin
+        sudo dnf install $bin -y
     fi
 done
 
