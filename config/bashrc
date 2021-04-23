@@ -88,7 +88,6 @@ shopt -s checkwinsize
 export HISTCONTROL=ignoreboth:erasedups
 export HISTSIZE=10000
 export HISTFILESIZE=20000
-export KYRAT_HOME=~/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && pathadd ~/.local/share/kyrat/bin
 [ -e ~/.nimble/bin ] && pathadd ~/.nimble/bin
 export EDITOR=vi

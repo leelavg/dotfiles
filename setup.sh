@@ -22,15 +22,21 @@ ln -sfv /etc/hosts $HOME/.dotfiles/etc_hosts
 
 for file in $HOME/.dotfiles/*
 do
-    file=`basename $file`
-    ln -sfv $HOME/.dotfiles/$file $HOME/.$file
+    name=$(basename $file)
+    if ! [[ $name =~ \.d$ ]];
+    then
+        ln -sfv $HOME/.dotfiles/$name $HOME/.$name
+    fi
 done
 
 # Creating required directories
-mkdir -pv $HOME/.local/share/kyrat
+# Nvim
 mkdir -pv $HOME/.config/nvim && ln -sfv $HOME/.init.vim $HOME/.config/nvim/init.vim
-git clone https://github.com/leelavg/kyrat --branch fork $HOME/.local/share/kyrat &> /dev/null
+# TPM
 git clone https://github.com/tmux-plugins/tpm ~/.tmux/plugins/tpm &> /dev/null
+# Kyrat
+mkdir -pv $HOME/.local/share/kyrat
+git clone https://github.com/leelavg/kyrat --branch fork $HOME/.local/share/kyrat &> /dev/null
 ln -sfv $HOME/.local/share/kyrat $HOME/.dotfiles/
 
 # Install required binaries
