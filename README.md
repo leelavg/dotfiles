@@ -3,21 +3,17 @@
 ## Motive
 ---
 
-To use same **dotfiles** across multiple linux machines (Red Hat family). Only _bashrc_ and _init.vim_ are shared across the network and trying best not to install any packages on remote server, however with little tweaking other dotfiles can also be shared on demand.
+To use same **dotfiles** across multiple linux machines (Red Hat family).
 
-### Neovim
+## Note
 ---
 
-The following tools are installed impliclity if the remote server doesn't have **neovim**
-
-1. neovim: _appimage incase nvim is not installed_
-2. minpac: _package manager for neovim_
-3. git: _for cloning minpac and other plugins on demand_
+Login (~bashrc) script is modelled in a such to find in which environment it's running (local/remote) and change prompt accordingly
 
 ### Bash
 ---
 
-Required dotfiles are transferred to remote server on **_every_** login and **_deleted_** on every logout. This is made possible by [kyrat](https://github.com/fsquillace/kyrat). However neovim _appimage_ (if downloaded) and plugins will not be deleted.
+Required dotfiles are transferred to remote server on **_every_** login and **_deleted_** on every logout. This is made possible by [kyrat](https://github.com/fsquillace/kyrat).
 
 ### Configs
 ---
