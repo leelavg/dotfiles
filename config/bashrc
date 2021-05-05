@@ -106,6 +106,13 @@ then
     source /usr/local/bin/virtualenvwrapper_lazy.sh
 fi
 
+if [ -d ~/Downloads/adhoc/venv ]
+then
+    export WORKON_HOME=~/Downloads/adhoc/venv
+    export VIRTUALENVWRAPPER_SCRIPT=~/.local/bin/virtualenvwrapper.sh
+    source ~/.local/bin/virtualenvwrapper_lazy.sh
+fi
+
 # }}}
 
 #====== Archive command history {{{

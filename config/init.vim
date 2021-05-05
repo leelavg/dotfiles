@@ -242,6 +242,11 @@ augroup AdhocSettings
 
     " Unset foldmethod for Nim files
     autocmd FileType nim set foldmethod=manual
+
+    " Spell Check for markdown files
+    autocmd BufRead,BufNewFile *.md setlocal spell
+    autocmd BufRead,BufNewFile *.md set complete+=kspell
+
 augroup END
 
 " Highlight Window
@@ -283,6 +288,7 @@ augroup END
 let g:fzf_commits_log_options = '--graph --color=always
 \ --format="%C(yellow)%h%C(red)%d%C(reset)
 \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
+let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
 
 " Quickscope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
