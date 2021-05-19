@@ -190,7 +190,7 @@ alias kn='kubens'
 #===== Docker
 alias d='docker'
 alias dl='docker ps -l -q'
-alias dp='docker ps -a'
+alias dp='docker ps -as'
 alias dre='docker rm $(docker ps -a -q)'
 alias drd='docker rmi $(docker images -f "dangling=true" -q) && docker volume rm $(docker volume ls -qf dangling=true)'
 alias did='docker images --format "{{.Repository}}:{{.Tag}}:{{.ID}}" | fzf | cut -d: -f3 | xargs -I id docker rmi id'
