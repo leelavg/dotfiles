@@ -55,6 +55,7 @@ function! ExtraPlugins() abort
         call minpac#add('pprovost/vim-ps1')
         call minpac#add('prettier/vim-prettier')
         call minpac#add('alaviss/nim.nvim')
+        call minpac#add('martinda/Jenkinsfile-vim-syntax')
 endfunction
 
 " Load Plugin Manager (minpac) on demand

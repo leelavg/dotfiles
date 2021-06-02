@@ -32,7 +32,12 @@ pyc () {
     printf "\n%10s Remove unused vars/imports by 'autoflake'\n"; autoflake \
     --in-place --remove-unused-variables --remove-all-unused-imports "$@";
     printf "\n%10s Checking against 'flake8'\n"; flake8 "$@";
-    printf "\n%10s Errors from 'pylint'\n"; pylint --rcfile=.pylintrc "$@";
+    printf "\n%10s Errors from 'pylint'\n";
+    if [ -e .pylintrc ]; then
+        pylint --rcfile=.pylintrc "$@";
+    else
+        pylint "$@";
+    fi
 
 }
 
@@ -154,8 +159,9 @@ alias re="source $cwd/.bashrc && echo reloaded bashrc"
 alias vm="cat $hosts_file | grep -P $1 --color=never"
 alias g='gluster'
 alias gm='gluster-mountbroker'
-alias tm="TERM=screen-256color tmux -2 new -s"
-alias td='TERM=screen-256color tmux attach -d'
+alias tm="TERM=screen-256color tmux -2 new -s "
+alias td='TERM=screen-256color tmux attach -d '
+alias ta='TERM=screen-256color tmux attach -t '
 alias tl='tmux ls'
 alias ks='kyrat'
 alias nv='nvim'
