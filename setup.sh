@@ -40,6 +40,7 @@ git clone https://github.com/leelavg/kyrat --branch fork $HOME/.local/share/kyra
 ln -sfv $HOME/.local/share/kyrat $HOME/.dotfiles/
 
 # Install required binaries
+# TODO: jump, k3d, kubctx, kubens, ansible, hugo, tmux, webify etc
 bins=@(konsole virt-manager fzf neovim bat)
 for bin in ${bins[@]};
 do
