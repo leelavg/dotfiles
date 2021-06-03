@@ -72,7 +72,7 @@ export PATH
 
 export cwd=`[ ! -z $KHOME ] && echo $KHOME || echo $HOME`
 hosts_file=$cwd/.etc_hosts
-hname=`command -v hostname 1>/dev/null && echo $(hostname -i) | awk '{print $NF}'`
+hname=`command -v hostname 1>/dev/null && echo $(timeout 0.1 hostname -i) | awk '{print $NF}'`
 hname=${hname:=DUMMY}
 etc_host=$(grep -P "$hname\b" $hosts_file | tr -s ' ' | awk '{print $(NF)}')
 
