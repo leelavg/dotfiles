@@ -193,13 +193,16 @@ alias k='kubectl'
 alias kx='kubectx'
 alias kn='kubens'
 
-#===== Docker
+#===== Docker/Podman/Buildah
 alias d='docker'
 alias dl='docker ps -l -q'
-alias dp='docker ps -as'
+alias dp='docker ps -a'
 alias dre='docker rm $(docker ps -a -q)'
 alias drd='docker rmi $(docker images -f "dangling=true" -q) && docker volume rm $(docker volume ls -qf dangling=true)'
 alias did='docker images --format "{{.Repository}}:{{.Tag}}:{{.ID}}" | fzf | cut -d: -f3 | xargs -I id docker rmi id'
+
+alias p='podman'
+alias b='buildah'
 
 #===== Nim
 alias nr='nim c -r --out:/tmp/nim-cache '
