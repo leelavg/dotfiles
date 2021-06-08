@@ -98,11 +98,11 @@ export KYRAT_HOME=$HOME/.dotfiles
 [ -e ~/.nimble/bin ] && pathadd ~/.nimble/bin
 export EDITOR=vi
 # [ -f $HOME/pystartup.py ] && export PYTHONSTARTUP=$HOME/pystartup.py
-if command -v go 1>/dev/null;
-then
-    export GOPATH=$(go env GOPATH)
-    pathadd $(go env GOPATH)/bin
-fi
+# if command -v go 1>/dev/null;
+# then
+#     export GOPATH=$(go env GOPATH)
+#     pathadd $(go env GOPATH)/bin
+# fi
 
 if [ -d ~/toolbox/venv ]
 then

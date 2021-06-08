@@ -48,7 +48,7 @@ function! ExtraPlugins() abort
         call minpac#add('skywind3000/gutentags_plus')
         call minpac#add('majutsushi/tagbar')
         call minpac#add('mgedmin/python-imports.vim')
-        " call minpac#add('fatih/vim-go')
+        call minpac#add('fatih/vim-go')
         call minpac#add('tpope/vim-fugitive')
         call minpac#add('tpope/vim-obsession')
         call minpac#add('crusoexia/vim-monokai')
@@ -153,10 +153,10 @@ nnoremap <silent> <leader>t :Tags<cr>
 map      <silent> <leader>i :ImportName<cr>
 
 " vim-go bindings
-" nnoremap <silent> <leader>gr :GoRun<cr>
-" nnoremap <silent> <leader>gt :GoTest<cr>
-" nnoremap <silent> <leader>ga :GoAlternate<cr>
-" nnoremap <silent> <leader>gi :GoImports<cr>
+nnoremap <silent> <leader>gr :GoRun<cr>
+nnoremap <silent> <leader>gt :GoTest<cr>
+nnoremap <silent> <leader>ga :GoAlternate<cr>
+nnoremap <silent> <leader>gi :GoImports<cr>
 
 " Ripgrep
 nnoremap <leader>rg :Rg<space>
@@ -289,7 +289,7 @@ augroup END
 let g:fzf_commits_log_options = '--graph --color=always
 \ --format="%C(yellow)%h%C(red)%d%C(reset)
 \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
-let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
+" let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
 
 " Quickscope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
@@ -322,18 +322,18 @@ let g:gutentags_ctags_exclude = [
     \ ]
 
 " vim-go
-" let g:go_fmt_command = 'goimports'
-" let g:go_highlight_format_strings = 1
-" let g:go_highlight_function_arguments = 1
-" let g:go_highlight_function_calls = 1
-" let g:go_highlight_functions = 1
-" let g:go_highlight_operators = 1
-" let g:go_highlight_types = 1
-" let g:go_highlight_extra_types = 1
-" let g:go_highlight_fields = 1
-" let g:go_highlight_generate_tags = 1
-" let g:go_highlight_variable_assignments = 1
-" let g:go_highlight_variable_declarations = 1
+let g:go_fmt_command = 'goimports'
+let g:go_highlight_format_strings = 1
+let g:go_highlight_function_arguments = 1
+let g:go_highlight_function_calls = 1
+let g:go_highlight_functions = 1
+let g:go_highlight_operators = 1
+let g:go_highlight_types = 1
+let g:go_highlight_extra_types = 1
+let g:go_highlight_fields = 1
+let g:go_highlight_generate_tags = 1
+let g:go_highlight_variable_assignments = 1
+let g:go_highlight_variable_declarations = 1
 
 " Colorscheme
 set termguicolors
