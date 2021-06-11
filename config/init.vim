@@ -54,7 +54,7 @@ function! ExtraPlugins() abort
         call minpac#add('crusoexia/vim-monokai')
         call minpac#add('pprovost/vim-ps1')
         call minpac#add('prettier/vim-prettier')
-        call minpac#add('alaviss/nim.nvim')
+        " call minpac#add('alaviss/nim.nvim')
         call minpac#add('martinda/Jenkinsfile-vim-syntax')
 endfunction
 
@@ -242,7 +242,7 @@ augroup AdhocSettings
     autocmd BufNewFile,BufRead Dockerfile* set syntax=ruby
 
     " Unset foldmethod for Nim files
-    autocmd FileType nim set foldmethod=manual
+    " autocmd FileType nim set foldmethod=manual
 
     " Spell Check for markdown files
     autocmd BufRead,BufNewFile *.md setlocal spell
@@ -276,10 +276,10 @@ augroup filetype_yaml
 augroup END
 
 " Setting for Nim
-augroup completion
-    autocmd!
-    autocmd FileType nim nnoremap <silent> <leader>nr :make -r --out:/tmp/nim-cache<cr>
-augroup END
+" augroup nim_run
+"     autocmd!
+"     autocmd FileType nim nnoremap <silent> <leader>nr :make -r --out:/tmp/nim-cache<cr>
+" augroup END
 
 " }}}
 

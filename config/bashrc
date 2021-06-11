@@ -95,7 +95,7 @@ export HISTSIZE=10000
 export HISTFILESIZE=20000
 export KYRAT_HOME=$HOME/.dotfiles
 [ -d ~/.local/share/kyrat/bin ] && pathadd ~/.local/share/kyrat/bin
-[ -e ~/.nimble/bin ] && pathadd ~/.nimble/bin
+# [ -e ~/.nimble/bin ] && pathadd ~/.nimble/bin
 export EDITOR=vi
 # [ -f $HOME/pystartup.py ] && export PYTHONSTARTUP=$HOME/pystartup.py
 # if command -v go 1>/dev/null;
@@ -205,7 +205,7 @@ alias p='podman'
 alias b='buildah'
 
 #===== Nim
-alias nr='nim c -r --out:/tmp/nim-cache '
+# alias nr='nim c -r --out:/tmp/nim-cache '
 
 # }}}
 
