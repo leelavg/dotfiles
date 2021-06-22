@@ -51,11 +51,12 @@ function! ExtraPlugins() abort
         call minpac#add('fatih/vim-go')
         call minpac#add('tpope/vim-fugitive')
         call minpac#add('tpope/vim-obsession')
-        call minpac#add('crusoexia/vim-monokai')
+        " call minpac#add('crusoexia/vim-monokai')
         call minpac#add('pprovost/vim-ps1')
         call minpac#add('prettier/vim-prettier')
         " call minpac#add('alaviss/nim.nvim')
         call minpac#add('martinda/Jenkinsfile-vim-syntax')
+        call minpac#add('srcery-colors/srcery-vim')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -337,7 +338,8 @@ let g:go_highlight_variable_declarations = 1
 
 " Colorscheme
 set termguicolors
-colorscheme monokai
-highlight String guifg=#dea18a
+let g:srcery_bg_passthrough=1
+colorscheme srcery
+" highlight String guifg=#dea18a
 
 " }}}
