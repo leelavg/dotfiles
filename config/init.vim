@@ -57,6 +57,7 @@ function! ExtraPlugins() abort
         " call minpac#add('alaviss/nim.nvim')
         call minpac#add('martinda/Jenkinsfile-vim-syntax')
         call minpac#add('srcery-colors/srcery-vim')
+        call minpac#add('itspriddle/vim-shellcheck')
 endfunction
 
 " Load Plugin Manager (minpac) on demand
@@ -119,7 +120,9 @@ set tabstop=4                              " number of columns occupied by a tab
 set softtabstop=4                          " see multiple spaces as tabstops so <BS> does the right thing
 set shiftwidth=4                           " width for autoindents
 set expandtab                              " converts tabs to white space
-set mouse=a                               " helps not scrolling tmux pane
+set mouse=a                                " helps not scrolling tmux pane
+set splitright                             " Always open new split (vsp) right side of current buffer
+set splitbelow                             " Always open new split (sp) below current buffer
 
 " }}}
 
