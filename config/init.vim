@@ -1,12 +1,6 @@
 " Filename:   init.vim
 " Github:     https://github.com/leelavg/dotfiles/
 
-" Path {{{
-
-" set packpath^=$HOME/.nvim/
-
-" }}}
-
 " Custom Functions {{{
 
 " Install minpac
@@ -14,13 +8,6 @@ function! InstallMinpac() abort
 
     if !isdirectory($HOME.'/.config/nvim/pack')
         if !exists('*minpac#init')
-            " if !executable('git')
-            "     " Install git
-            "     :echo '..... Installing git command line utility .....'
-            "     :silent !yum -y install git &>/dev/null
-            "     :echo '..... Installed git command line utility .....'
-            " endif
-
             " Install minpac
             call mkdir($HOME.'/.config/nvim/pack/minpac/opt/', 'p')
             :silent !cd $HOME/.config/nvim/pack/minpac/opt/ && git clone https://github.com/k-takata/minpac.git 2>/dev/null
@@ -29,51 +16,42 @@ function! InstallMinpac() abort
 
 endfunction
 
-" Minimal Plugins
-function! MinimalPlugins() abort
+" List of all plugins
+function! Plugins() abort
         call minpac#add('tpope/vim-surround')
         call minpac#add('tpope/vim-repeat')
-        call minpac#add('machakann/vim-highlightedyank')
         call minpac#add('jiangmiao/auto-pairs')
         call minpac#add('unblevable/quick-scope')
-endfunction
-
-" Extra Plugins
-function! ExtraPlugins() abort
         call minpac#add('tpope/vim-commentary')
         call minpac#add('christoomey/vim-tmux-navigator')
         call minpac#add('junegunn/fzf.vim')
         call minpac#add('numirias/semshi')
-        call minpac#add('ludovicchabant/vim-gutentags')
-        call minpac#add('skywind3000/gutentags_plus')
-        call minpac#add('majutsushi/tagbar')
         call minpac#add('mgedmin/python-imports.vim')
         call minpac#add('fatih/vim-go')
         call minpac#add('tpope/vim-fugitive')
         call minpac#add('tpope/vim-obsession')
-        " call minpac#add('crusoexia/vim-monokai')
-        call minpac#add('pprovost/vim-ps1')
-        call minpac#add('prettier/vim-prettier')
-        " call minpac#add('alaviss/nim.nvim')
         call minpac#add('martinda/Jenkinsfile-vim-syntax')
+        call minpac#add('prettier/vim-prettier')
         call minpac#add('srcery-colors/srcery-vim')
         call minpac#add('itspriddle/vim-shellcheck')
+        call minpac#add('preservim/tagbar')
+        call minpac#add('ludovicchabant/vim-gutentags')
+        call minpac#add('machakann/vim-highlightedyank')
+        " call minpac#add('nvim-treesitter/nvim-treesitter', {'do': 'silent! TSUpdate'})
 endfunction
 
 " Load Plugin Manager (minpac) on demand
-function! PackInit(type) abort
+function! Pack() abort
 
     call InstallMinpac()
+
+    " Init and add minpac first
     packadd minpac
     call minpac#init()
     call minpac#add('k-takata/minpac', {'type':'opt', 'branch':'devel'})
 
-    if a:type == 'minimal'
-        call MinimalPlugins()
-    elseif a:type == 'full'
-        call MinimalPlugins()
-        call ExtraPlugins()
-    endif
+    " Install all plugins
+    call Plugins()
 
 endfunction
 
@@ -202,10 +180,9 @@ command! Qall qall
 command! QA qall
 command! E e
 command! X x
-command! PackMinimal    call PackInit('minimal') | call minpac#update()
-command! PackFull       call PackInit('full') | call minpac#update()
-command! PackClean      call PackInit('full') | call minpac#clean()
-command! PackStatus     packadd minpac | call minpac#status()
+command! PackUpdate    call Pack()      | call minpac#update()
+command! PackClean     call Pack()      | call minpac#clean()
+command! PackStatus    packadd minpac   | call minpac#status()
 
 " Remove tags cache dir
 command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir . '/*')
@@ -215,10 +192,6 @@ command! -nargs=0 GutentagsClearCache call system('rm ' . g:gutentags_cache_dir 
 " Aesthetics{{{
 
 highlight VertSplit     cterm=NONE
-" highlight statusline    ctermbg=white   ctermfg=magenta
-" highlight search        ctermbg=white   ctermfg=red
-" highlight ColorColumn   ctermbg=234
-" highlight CursorLine    ctermbg=234     cterm=None
 
 " QuickScope character highlights
 highlight QuickScopePrimary     guifg='#afff5f' gui=underline ctermfg=155 cterm=underline
@@ -232,6 +205,7 @@ set statusline=\|CWD:%r%{getcwd()}%h\|%=\|Path:%f\|%=\|Total:%L,Line:%l,Column:%
 
 augroup AdhocSettings
     autocmd!
+
     " Rebalance windows on vim resize
     autocmd VimResized * :wincmd =
     autocmd Filetype help nnoremap <buffer> q :q<CR>
@@ -241,12 +215,6 @@ augroup AdhocSettings
 
     " Close quickfixlist with <esc>
     autocmd FileType qf nnoremap <silent> <buffer> <esc> :cclose<cr>
-
-    " Maybe inconsistent but better than inbuilt
-    autocmd BufNewFile,BufRead Dockerfile* set syntax=ruby
-
-    " Unset foldmethod for Nim files
-    " autocmd FileType nim set foldmethod=manual
 
     " Spell Check for markdown files
     autocmd BufRead,BufNewFile *.md setlocal spell
@@ -279,12 +247,6 @@ augroup filetype_yaml
     autocmd FileType yaml set indentkeys-=<:> foldmethod=indent nofoldenable
 augroup END
 
-" Setting for Nim
-" augroup nim_run
-"     autocmd!
-"     autocmd FileType nim nnoremap <silent> <leader>nr :make -r --out:/tmp/nim-cache<cr>
-" augroup END
-
 " }}}
 
 " Variable Modifications {{{
@@ -293,14 +255,13 @@ augroup END
 let g:fzf_commits_log_options = '--graph --color=always
 \ --format="%C(yellow)%h%C(red)%d%C(reset)
 \ - %C(bold green)(%ar)%C(reset) %s %C(blue)<%an>%C(reset)"'
-" let $FZF_DEFAULT_COMMAND = 'rg --files --hidden'
 
 " Quickscope
 let g:qs_highlight_on_keys = ['f', 'F', 't', 'T']
 
 " Gutentags
 let g:gutentags_add_default_project_roots = 0
-let g:gutentags_modules = ['ctags', 'gtags_cscope']
+let g:gutentags_modules = ['ctags']
 let g:gutentags_project_root = ['package.json', '.git']
 let g:gutentags_cache_dir = expand('~/.cache/ctags/')
 let g:gutentags_plus_switch = 1
@@ -343,6 +304,51 @@ let g:go_highlight_variable_declarations = 1
 set termguicolors
 let g:srcery_bg_passthrough=1
 colorscheme srcery
-" highlight String guifg=#dea18a
+
+" }}}
+
+" Lua config {{{
+
+"lua <<EOF
+"require'nvim-treesitter.configs'.setup {
+"    highlight = {
+"        enable = true,
+"    },
+"    incremental_selection = {
+"        enable = true,
+"    },
+"    indent = {
+"        enable = true,
+"    },
+"    ensure_installed = {
+"        "bash",
+"        "css",
+"        "dockerfile",
+"        "go",
+"        "html",
+"        "javascript",
+"        "json",
+"        "lua",
+"        "python",
+"        "toml",
+"        "yaml",
+"        "zig",
+"    },
+"    enable = {
+"        "bash",
+"        "css",
+"        "dockerfile",
+"        "go",
+"        "html",
+"        "javascript",
+"        "json",
+"        "lua",
+"        "python",
+"        "toml",
+"        "yaml",
+"        "zig",
+"    },
+"}
+"EOF
 
 " }}}
