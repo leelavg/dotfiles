@@ -1,0 +1,36 @@
+theme = "gruvbox"
+
+[editor]
+line-number = "relative"
+cursorline = true
+color-modes = true
+true-color = true
+undercurl = true
+rulers = [79]
+
+[editor.statusline]
+right = ["diagnostics", "selections", "total-line-numbers", "position", "version-control"]
+
+[editor.cursor-shape]
+insert = "bar"
+
+[editor.whitespace.render]
+tab = "all"
+newline = "all"
+
+[editor.indent-guides]
+render = true
+
+[editor.soft-wrap]
+enable = true
+wrap-indicator = ""
+
+[keys.insert]
+j = { k = ["normal_mode", ":w"] }
+
+[keys.normal]
+C-r = [":config-open", ":config-reload"]
+C-y = [":clipboard-yank"]
+
+[keys.select]
+C-y = [":clipboard-yank"]

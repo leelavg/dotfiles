@@ -1,0 +1,23 @@
+# Filename:     config/gitconfig
+# Github:       https://github.com/leelavg/dotfiles
+
+[user]
+    # Set in ~/.gitconfig_local, name, email & username
+
+[include]
+    path = ~/.gitconfig_local
+
+[color]
+    ui = auto
+
+[alias]
+    s = status
+    fza = "!git ls-files -m -o --exclude-standard | fzf --print0 -m | xargs -0 -t -r git add"
+    fzc = "!git for-each-ref --format='%(refname:short)' refs/heads | fzf --print0 | xargs -0 -t -r git checkout"
+    aliases = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
+    lg = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen(%cr) %C(yellow)%d%Creset %C(cyan)%s%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+    hist = log --pretty=format:'%Cred%h%Creset - %Cgreen%ad%Creset | %C(cyan)%s%d%Creset %C(bold blue)[%an]%Creset' --graph --date=short
+    pr = "!f() { git fetch ${2:-origin} pull/$1/head:pr$1; git checkout pr$1; }; f"
+
+[init]
+	defaultBranch = main
