@@ -143,8 +143,7 @@ shopt -s checkwinsize
 export HISTCONTROL=ignoreboth:erasedups
 export HISTSIZE=10000
 export HISTFILESIZE=20000
-export KYRAT_HOME=$HOME/.dotfiles
-EDITOR=$(command -v nvim)
+EDITOR=$(command -v hx)
 EDITOR=${EDITOR:-vi}
 export EDITOR
 if command -v go 1>/dev/null; then
@@ -206,10 +205,9 @@ alias td='tmux attach -d '
 alias ta='tmux attach -t '
 alias tl='tmux ls'
 # zellij
-alias zl='zellij -s '
-alias za='zellij attach -c '
-alias zs='zellij list-sessions'
-alias nv='nvim'
+# alias zl='zellij -s '
+# alias za='zellij attach -c '
+# alias zs='zellij list-sessions'
 # File Preview
 alias fp="fzf --preview 'bat --style=numbers --color=always --line-range :500 {}'"
 # VPN
