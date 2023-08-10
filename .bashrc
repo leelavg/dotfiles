@@ -299,7 +299,8 @@ function get_git() {
 function set_ps1() {
 
   #-- Local
-  prompt="\n$cyan\u$yellow@$red\h $blue\w$yellow\$(get_git) $magenta\$PS2\n$white\\$ $end"
+  h=$(hostname -s | cut -c 1-10)
+  prompt="\n$cyan\u$yellow@$red$h $blue\w$yellow\$(get_git) $magenta\$PS2\n$white\\$ $end"
 
   echo "$prompt"
 
