@@ -308,7 +308,7 @@ function set_ps1() {
 
 export PROMPT_DIRTRIM=1
 if [ -n "${ASCIINEMA_REC}" ]; then
-  PS1='~ \$'
+  PS1='~ \$ '
 else
   PS1=$(set_ps1)
 fi
