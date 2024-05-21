@@ -1,25 +1,92 @@
-# Filename:     config/gitconfig
-# Github:       https://github.com/leelavg/dotfiles
+# Notes
+# Good one: https://blog.gitbutler.com/git-tips-and-tricks/
+
+# filter out paths: git show :^{path}
+
+# blame:
+# git blame -L m,n path/to/file
+# git blame -L :'func main' path/to/file
+# git blame -w -C -C -C -L 100,200 path/to/file
+
+# commits touching lines:
+# git log -L m,n:path/to/file
+
+# git diff --word-diff (csia)
+# seq 1 24 | git column --mode=column --padding=5
+
+# git ls-remote <name>
+
+# switch:
+# git switch <branch>
+# git switch -c <branch> (new branch)
+
+# restore:
+# git restore <file>
+# git restore --source HEAD@{10.minute.ago} <file>
+# git restore -p <file> (patch by hunk)
+
+# precommit & husky (hooks)
+
+# attributes:
+# echo '*.png diff=exit' >> .gitattributes
+# git config diff.exif.textconv exiftool
+
+# smudge & clean (lfs): staging area vs working directory
+# git config filter.dater.smude <script>
+# git config filter.dater.clean <script|command>
+# echo 'date*.rb filter=dater' >> .gitattributes
+
+# rebase & commit:
+# git commit -a --fixup=<commit> (base of correct)
+# git rebase --autosquash
+# git rebase --update-refs -i main (rebasing stacks, multiple branches)
+
+# worktrees:
+# 1. working on more than one branch at a time
+# 2. provide a new working dir for each branch
+# git worktree add -b bugfix ../branches/bugfix
+# cd ../branches/bugfix
+# shared object database
+
+# make git reuse recorded resolution
+[core.rerere]
+	enabled = true
+	autoUpdate = true
+
+[gpg]
+	format = ssh
 
 [user]
-    # Set in ~/.gitconfig_local, name, email & username
+	signingKey = ~/.ssh/id_rsa.pub
 
-[include]
-    path = ~/.gitconfig_local
+[branch]
+	sort = -committerdate
+
+[includeIf "gitdir:~/work/"]
+	path = ~/.gitconfig-work
+
+[includeIf "gitdir:~/oss/"]
+	path = ~/.gitconfig-oss
 
 [color]
-    ui = auto
+	ui = auto
 
 [alias]
-    s = status
-    fza = "!git ls-files -m -o --exclude-standard | fzf --print0 -m | xargs -0 -t -r git add"
-    fzc = "!git for-each-ref --format='%(refname:short)' refs/heads | fzf --print0 | xargs -0 -t -r git checkout"
-    aliases = !git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort
-    lg = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen(%cr) %C(yellow)%d%Creset %C(cyan)%s%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
-    hist = log --pretty=format:'%Cred%h%Creset - %Cgreen%ad%Creset | %C(cyan)%s%d%Creset %C(bold blue)[%an]%Creset' --graph --date=short
-    pr = "!f() { git fetch ${2:-origin} pull/$1/head:pr$1; git checkout pr$1; }; f"
+	s = status
+	ls = ls-tree --full-tree --name-only -r HEAD
+	fza = "!git ls-files -m -o --exclude-standard | fzf --print0 -m | xargs -0 -t -r git add"
+	fzc = "!git for-each-ref --format='%(refname:short)' refs/heads | fzf --print0 | xargs -0 -t -r git checkout"
+	als = "!git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort"
+	lg = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen(%cr) %C(yellow)%d%Creset %C(cyan)%s%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
+	hist = log --pretty=format:'%Cred%h%Creset - %Cgreen%ad%Creset | %C(cyan)%s%d%Creset %C(bold blue)[%an]%Creset' --graph --date=short
+	pr = "!f() { git fetch ${2:-origin} pull/$1/head:pr$1; git checkout pr$1; }; f"
+	fpush = "push --force-with-lease"
 
 [init]
 	defaultBranch = main
+
 [merge]
 	conflictStyle = zdiff3
+
+[rebase]
+	updateRefs = true

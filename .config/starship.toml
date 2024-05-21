@@ -1,0 +1,63 @@
+format = """
+$shlvl\
+$sudo\
+$username\
+$hostname\
+$directory\
+$git_branch\
+$git_status\
+$git_metrics\
+$golang\
+$python\
+$jobs\
+$cmd_duration\
+$line_break\
+$character
+"""
+
+[character]
+success_symbol = '[>](bold green)'
+error_symbol = '[>](bold red)'
+
+[cmd_duration]
+format = '[took $duration]($style)'
+style = 'bright-blue'
+
+[directory]
+truncation_length = 2
+fish_style_pwd_dir_length = 3
+style = 'bold blue'
+
+[git_branch]
+format = '[$symbol$branch]($style) '
+style = 'bold yellow'
+
+[golang]
+format = '[$symbol($version)]($style) '
+style = 'italic dimmed white'
+
+[python]
+format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
+style = 'italic dimmed white'
+
+[hostname]
+format = '[$ssh_symbol$hostname]($style) '
+ssh_only = false
+trim_at = '-15'
+style = 'bold red'
+
+[jobs]
+symbol = '+'
+
+[shlvl]
+disabled = false
+symbol = '↓'
+
+[sudo]
+disabled = false
+
+[username]
+format = '[$user[@](bold yellow)]($style)'
+style_user = 'bold cyan'
+style_root = 'bold cyan'
+show_always = true
