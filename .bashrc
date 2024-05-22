@@ -97,6 +97,11 @@ alias b='buildah'
 #====== For packages
 
 [ -d /usr/share/fzf/shell ] && source /usr/share/fzf/shell/key-bindings.$(basename $SHELL)
-command -v zoxide >/dev/null && eval "$(zoxide init bash)"
 command -v starship >/dev/null && eval "$(starship init bash)"
 command -v vfox >/dev/null && eval "$(vfox activate bash)"
+command -v zoxide >/dev/null && eval "$(zoxide init bash)"
+command -v virtualenvwrapper.sh >/dev/null && source $(command -v virtualenvwrapper.sh)
+
+if ! [[ "$PROMPT_COMMAND" =~ "history -a" ]]; then
+  export PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
+fi

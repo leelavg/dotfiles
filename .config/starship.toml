@@ -1,6 +1,6 @@
 format = """
-$shlvl\
-$sudo\
+${custom.shlvl}\
+${custom.sudo}\
 $username\
 $hostname\
 $directory\
@@ -9,6 +9,7 @@ $git_status\
 $git_metrics\
 $golang\
 $python\
+$kubernetes\
 $jobs\
 $cmd_duration\
 $line_break\
@@ -23,9 +24,28 @@ error_symbol = '[>](bold red)'
 format = '[took $duration]($style)'
 style = 'bright-blue'
 
+[custom.shlvl]
+symbol = '↓'
+# exit in current shell with symbol closes the window or drop out of ssh/tmux
+command = '''
+declare -i lvl=$((SHLVL-2));
+test x${TERM_PROGRAM} = xtmux && ((lvl -= 1));
+test x${SSH_TTY} != x && ((lvl += 1));
+test $lvl -gt 0 && echo $lvl;
+'''
+format = '[($symbol$output )]($style)'
+style = 'bold yellow'
+when = true
+
+[custom.sudo]
+symbol = '🧙'
+format = '[as $symbol]($style) '
+style = 'bold blue'
+when = 'test $USER != root && sudo -Nnv &>/dev/null'
+
 [directory]
 truncation_length = 2
-fish_style_pwd_dir_length = 3
+fish_style_pwd_dir_length = 1
 style = 'bold blue'
 
 [git_branch]
@@ -34,14 +54,15 @@ style = 'bold yellow'
 
 [golang]
 format = '[$symbol($version)]($style) '
-style = 'italic dimmed white'
+style = 'italic white'
 
 [python]
 format = '[${symbol}(${version} )(\($virtualenv\) )]($style)'
-style = 'italic dimmed white'
+style = 'italic white'
 
 [hostname]
-format = '[$ssh_symbol$hostname]($style) '
+ssh_symbol = '🌐'
+format = '[$hostname$ssh_symbol]($style) '
 ssh_only = false
 trim_at = '-15'
 style = 'bold red'
@@ -49,12 +70,11 @@ style = 'bold red'
 [jobs]
 symbol = '+'
 
-[shlvl]
+[kubernetes]
+format = '[$symbol]($style) '
+detect_env_vars = ['KUBECONFIG']
 disabled = false
-symbol = '↓'
-
-[sudo]
-disabled = false
+style = 'bright-red'
 
 [username]
 format = '[$user[@](bold yellow)]($style)'
