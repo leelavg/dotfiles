@@ -1,0 +1,286 @@
+% ocp
+
+# odf catsrc
+echo '
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: CatalogSource
+metadata:
+ name: odf-catalogsource
+ namespace: openshift-marketplace
+spec:
+ displayName: OpenShift Data Foundation
+ image: quay.io/rhceph-dev/ocs-registry:<tag>
+ publisher: Red Hat
+ sourceType: grpc
+' | 
+
+# odf icsp
+oc debug -n default -q $(oc get no -oname | head -n1) -- chroot /host sh -c 'podman run --rm --entrypoint cat quay.io/rhceph-dev/ocs-registry:<tag> /icsp.yaml' | 
+
+# label all nodes
+oc label $(oc get no -oname) cluster.ocs.openshift.io/openshift-storage=''
+
+# label only workers
+oc label $(oc get no -lnode-role.kubernetes.io/worker -l '!node-role.kubernetes.io/control-plane' -oname) cluster.ocs.openshift.io/openshift-storage=''
+
+# global pull secret
+oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' | jq --arg auth "$(cat ~/.quay-cred)" '.auths += {"quay.io/rhceph-dev": {"auth": $auth}}' > /tmp/updated-pull && oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=/tmp/updated-pull
+
+# toolbox
+oc patch storagecluster ocs-storagecluster -n openshift-storage --type json --patch '[{"op": "replace", "path": "/spec/enableCephTools", "value": true}]'
+
+# binding
+kubectl get rolebindings,clusterrolebindings -A -o custom-columns='KIND:kind,NAMESPACE:metadata.namespace,NAME:metadata.name,SERVICE_ACCOUNTS:subjects[?(@.kind=="ServiceAccount")].name' | 
+
+# namespace
+echo '
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+ labels:
+  openshift.io/cluster-monitoring: "true"
+ name: openshift-storage
+' | 
+
+# operator group
+echo '
+---
+apiVersion: operators.coreos.com/v1
+kind: OperatorGroup
+metadata:
+ name: odf
+ namespace: openshift-storage
+spec:
+ targetNamespaces:
+ - openshift-storage
+' | 
+
+# subscription
+echo '
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+ name: odf
+ namespace: openshift-storage
+spec:
+ channel: <channel>
+ name: <subName>
+ source: odf-catalogsource
+ sourceNamespace: openshift-marketplace
+' | 
+
+$ subName: echo -n 'odf-operator ocs-operator ocs-client-operator' | tr ' ' '\n'
+# provider sno storagecluster
+echo '
+---
+apiVersion: ocs.openshift.io/v1
+kind: StorageCluster
+metadata:
+  name: ocs-storagecluster
+  namespace: openshift-storage
+spec:
+  flexibleScaling: true
+  allowRemoteStorageConsumers: true
+  providerAPIServerServiceType: ClusterIP
+  monPVCTemplate:
+    spec:
+      storageClassName: <scName>
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: <monStorage>
+  storageDeviceSets:
+    - config: {}
+      name: test
+      dataPVCTemplate:
+        metadata: {}
+        spec:
+          storageClassName: <scName>
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: <osdStorage>
+          volumeMode: Block
+      count: 3
+      placement: {}
+      replica: 1
+      deviceClass: ssd
+      resources:
+        requests:
+          cpu: 125m
+          memory: 128Mi
+  encryption:
+    kms: {}
+  mirroring: {}
+  multiCloudGateway:
+    disableLoadBalancerService: true
+  managedResources:
+    cephBlockPools:
+      disableSnapshotClass: true
+      disableStorageClass: true
+    cephFilesystems:
+      disableSnapshotClass: true
+      disableStorageClass: true
+    cephObjectStores:
+      hostNetwork: false
+    cephCluster: {}
+    cephConfig: {}
+    cephDashboard: {}
+    cephObjectStoreUsers: {}
+  arbiter: {}
+  nodeTopologies: {}
+  externalStorage: {}
+  placement:
+    mon: {}
+    mds: {}
+    mgr: {}
+    rbd-mirror: {}
+    rgw: {}
+    nfs: {}
+    noobaa-core: {}
+    noobaa-standalone: {}
+    osd: {}
+    osd-prepare: {}
+  resources:
+    mon:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    mds:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    mgr:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    mgr-sidecar:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    nfs:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    noobaa-core:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    noobaa-db:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    noobaa-db-vol:
+      requests:
+        storage: 10Gi
+    noobaa-endpoint:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    rbd-mirror:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    rgw:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+' | 
+
+$ scName: echo -n 'gp3-csi lvmcluster' | tr ' ' '\n'
+$ monStorage: echo -n '3Gi 5Gi 10Gi' | tr ' ' '\n'
+$ osdStorage: echo -n '3Gi 5Gi 10Gi' | tr ' ' '\n'
+
+# sample file app
+echo '
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ubi9-fs
+  namespace: default
+  labels:
+    app: ubi9-fs
+spec:
+  selector:
+    matchLabels:
+      app: ubi9-fs
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ubi9-fs
+    spec:
+      terminationGracePeriodSeconds: 2
+      containers:
+      - name: ubi9-fs
+        image: registry.access.redhat.com/ubi9-micro:9.4
+        command: ["/bin/bash", "-c"]
+        args: ["cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /mnt/pv/file && tail -f /dev/null"]
+        volumeMounts:
+        - name: cephfs
+          mountPath: /mnt/pv
+  volumeClaimTemplates:
+  - metadata:
+      name: cephfs
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      volumeMode: Filesystem
+      resources:
+        requests:
+          storage: 100Mi
+      storageClassName: ocs-storagecluster-cephfs
+' | 
+
+# sample block app
+echo '
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ubi9-bk
+  namespace: default
+  labels:
+    app: ubi9-bk
+spec:
+  selector:
+    matchLabels:
+      app: ubi9-bk
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ubi9-bk
+    spec:
+      terminationGracePeriodSeconds: 2
+      containers:
+      - name: ubi9-bk
+        image: registry.access.redhat.com/ubi9-micro:9.4
+        command: ["/bin/bash", "-c"]
+        args: ["cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /dev/xvda && tail -f /dev/null"]
+        volumeDevices:
+        - name: rbd
+          devicePath: /dev/xvda
+  volumeClaimTemplates:
+  - metadata:
+      name: rbd
+    spec:
+      accessModes: [ "ReadWriteMany" ]
+      volumeMode: Block
+      resources:
+        requests:
+          storage: 100Mi
+      storageClassName: ocs-storagecluster-ceph-rbd
+' | 
+
+# odf-console
+oc patch console.operator cluster -n openshift-storage --type json -p '[{"op": "add", "path": "/spec/plugins", "value": ["odf-console"]}]'
+
+# client-console
+oc patch console.operator cluster -n openshift-storage --type json -p '[{"op": "add", "path": "/spec/plugins", "value": ["odf-client-console"]}]'
+
