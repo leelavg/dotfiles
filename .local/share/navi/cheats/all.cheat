@@ -25,7 +25,7 @@ oc label $(oc get no -oname) cluster.ocs.openshift.io/openshift-storage=''
 oc label $(oc get no -lnode-role.kubernetes.io/worker -l '!node-role.kubernetes.io/control-plane' -oname) cluster.ocs.openshift.io/openshift-storage=''
 
 # global pull secret
-oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' | jq --arg auth "$(cat ~/.quay-cred)" '.auths += {"quay.io/rhceph-dev": {"auth": $auth}}' > /tmp/updated-pull && oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=/tmp/updated-pull
+oc get secret/pull-secret -n openshift-config --template='{{index .data ".dockerconfigjson" | base64decode}}' | jq --arg auth "$(cat ~/.quay-cred)" '.auths += {"quay.io/rhceph-dev": {"auth": $auth}}' > /tmp/updated-pull; oc set data secret/pull-secret -n openshift-config --from-file=.dockerconfigjson=/tmp/updated-pull
 
 # toolbox
 oc patch storagecluster ocs-storagecluster -n openshift-storage --type json --patch '[{"op": "replace", "path": "/spec/enableCephTools", "value": true}]'
