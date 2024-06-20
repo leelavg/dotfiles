@@ -3,5 +3,24 @@ name = "python"
 language-servers = [ "pylsp" ]
 auto-format = true
 
+[language-server.pylsp]
+command = "pylsp-hx"
+
+[language-server.pylsp.config.pylsp.plugins]
+autopep8.enabled = false
+flake8.enabled = false
+jedi_symbols.include_import_symbols = false
+jedi_completion.enabled = false
+mccabe.enabled = false
+preload.enabled = false
+pycodestyle.enabled = false
+pyflakes.enabled = false
+pylint.enabled = false
+rope_autoimport.enabled = true
+rope_autoimport.completions.enabled= true
+rope_autoimport.code_actions.enabled= true
+rope_completion.enabled = true
+yapf.enabled = false
+
 [language-server.pylsp.config.ruff]
 plugins.pyls_ruff.enabled = true

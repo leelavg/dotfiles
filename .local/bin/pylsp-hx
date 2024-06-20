@@ -1,0 +1,3 @@
+#!/usr/bin/bash
+
+test x${VIRTUAL_ENV} != x && ${VIRTUAL_ENV}/bin/python -m pylsp

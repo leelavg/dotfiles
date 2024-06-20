@@ -1,0 +1,12 @@
+#!/bin/bash
+# This hook is sourced after every virtualenv is activated.
+
+# do not run if the env is "lsp"
+test x$(basename ${VIRTUAL_ENV}) = "xlsp" && return
+
+# lsp venv doesn't exist
+LSP_PY=$(dirname $VIRTUAL_ENV)/lsp/bin/python
+test ! -e ${LSP_ENV} && return
+
+# add path of lsp site-packages to current env
+add2virtualenv $(${LSP_PY} -c "import sysconfig; paths=sysconfig.get_paths(); print(paths.get('platlib'), paths.get('purelib'), sep='\n')")
