@@ -24,3 +24,11 @@ yapf.enabled = false
 
 [language-server.pylsp.config.ruff]
 plugins.pyls_ruff.enabled = true
+
+[[language]]
+name = "boron"
+scope = "text.rebol"
+file-types = ["b"]
+comment-tokens = [";"]
+block-comment-tokens = {start = "/*", end = "*/"}
+indent = {tab-width=2, unit="  "}

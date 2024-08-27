@@ -118,4 +118,8 @@ command -v zoxide >/dev/null && eval "$(zoxide init bash)"
 command -v virtualenvwrapper_lazy.sh >/dev/null && source $(command -v virtualenvwrapper_lazy.sh)
 command -v navi >/dev/null && source <(navi widget bash)
 
+if ! [[ "$PROMPT_COMMAND" =~ "history -a" ]]; then
+  export PROMPT_COMMAND="history -a;$PROMPT_COMMAND"
+fi
+
 [[ ${BLE_VERSION-} ]] && ble-attach
