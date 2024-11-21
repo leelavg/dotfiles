@@ -26,9 +26,15 @@ yapf.enabled = false
 plugins.pyls_ruff.enabled = true
 
 [[language]]
-name = "boron"
-scope = "text.rebol"
-file-types = ["b"]
-comment-tokens = [";"]
-block-comment-tokens = {start = "/*", end = "*/"}
-indent = {tab-width=2, unit="  "}
+name = "html"
+language-servers = ["superhtml"]
+auto-format = true
+
+[language-server.superhtml]
+command = "superhtml"
+args = ["lsp"]
+
+[[language]]
+name = "c"
+language-servers = ["clangd"]
+auto-format = true

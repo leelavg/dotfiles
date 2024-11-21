@@ -6,7 +6,7 @@ test x$(basename ${VIRTUAL_ENV}) = "xlsp" && return
 
 # lsp venv doesn't exist
 LSP_PY=$(dirname $VIRTUAL_ENV)/lsp/bin/python
-test ! -e ${LSP_ENV} && return
+test ! -e ${LSP_PY} && return
 
 # add path of lsp site-packages to current env
 add2virtualenv $(${LSP_PY} -c "import sysconfig; paths=sysconfig.get_paths(); print(paths.get('platlib'), paths.get('purelib'), sep='\n')")

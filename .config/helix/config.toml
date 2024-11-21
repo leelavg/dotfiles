@@ -31,6 +31,7 @@ j = { k = ["normal_mode", ":w"] }
 [keys.normal]
 C-r = [":config-open", ":config-reload"]
 C-y = [":clipboard-yank"]
+A-l = [":open ~/.config/helix/languages.toml"]
 
 [keys.select]
 C-y = [":clipboard-yank"]
