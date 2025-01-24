@@ -6,17 +6,17 @@ echo '
 apiVersion: operators.coreos.com/v1alpha1
 kind: CatalogSource
 metadata:
- name: odf-catalogsource
+ name: odf-catsrc
  namespace: openshift-marketplace
 spec:
  displayName: OpenShift Data Foundation
  image: quay.io/rhceph-dev/ocs-registry:<tag>
  publisher: Red Hat
  sourceType: grpc
-' | 
+' |
 
 # odf icsp
-oc debug -n default -q $(oc get no -oname | head -n1) -- chroot /host sh -c 'podman run --rm --entrypoint cat quay.io/rhceph-dev/ocs-registry:<tag> /icsp.yaml' | 
+oc debug -n default -q $(oc get no -oname | head -n1) -- chroot /host sh -c 'podman run --rm --entrypoint cat quay.io/rhceph-dev/ocs-registry:<tag> /icsp.yaml' |
 
 # label all nodes
 oc label $(oc get no -oname) cluster.ocs.openshift.io/openshift-storage=''
@@ -31,7 +31,7 @@ oc get secret/pull-secret -n openshift-config --template='{{index .data ".docker
 oc patch storagecluster ocs-storagecluster -n openshift-storage --type json --patch '[{"op": "replace", "path": "/spec/enableCephTools", "value": true}]'
 
 # binding
-kubectl get rolebindings,clusterrolebindings -A -o custom-columns='KIND:kind,NAMESPACE:metadata.namespace,NAME:metadata.name,SERVICE_ACCOUNTS:subjects[?(@.kind=="ServiceAccount")].name' | 
+kubectl get rolebindings,clusterrolebindings -A -o custom-columns='KIND:kind,NAMESPACE:metadata.namespace,NAME:metadata.name,SERVICE_ACCOUNTS:subjects[?(@.kind=="ServiceAccount")].name' |
 
 # namespace
 echo '
@@ -42,7 +42,7 @@ metadata:
  labels:
   openshift.io/cluster-monitoring: "true"
  name: openshift-storage
-' | 
+' |
 
 # operator group
 echo '
@@ -55,7 +55,7 @@ metadata:
 spec:
  targetNamespaces:
  - openshift-storage
-' | 
+' |
 
 # subscription
 echo '
@@ -63,16 +63,16 @@ echo '
 apiVersion: operators.coreos.com/v1alpha1
 kind: Subscription
 metadata:
- name: odf
+ name: <subName>
  namespace: openshift-storage
 spec:
  channel: <channel>
  name: <subName>
- source: odf-catalogsource
+ source: odf-catsrc
  sourceNamespace: openshift-marketplace
-' | 
+' |
 
-$ subName: echo -n 'odf-operator ocs-operator ocs-client-operator' | tr ' ' '\n'
+$ subName: echo -n 'odf-operator ocs-operator ocs-client-operator rook-ceph-operator' | tr ' ' '\n'
 # provider sno storagecluster
 echo '
 ---
@@ -144,8 +144,6 @@ spec:
     nfs: {}
     noobaa-core: {}
     noobaa-standalone: {}
-    osd: {}
-    osd-prepare: {}
   resources:
     mon:
       requests:
@@ -190,38 +188,164 @@ spec:
       requests:
         cpu: 125m
         memory: 128Mi
-' | 
+' |
+
+# internal/converge sno storagecluster
+echo '
+---
+apiVersion: ocs.openshift.io/v1
+kind: StorageCluster
+metadata:
+  name: ocs-storagecluster
+  namespace: openshift-storage
+spec:
+  flexibleScaling: true
+  providerAPIServerServiceType: ClusterIP
+  monPVCTemplate:
+    spec:
+      storageClassName: <scName>
+      accessModes:
+      - ReadWriteOnce
+      resources:
+        requests:
+          storage: <monStorage>
+  storageDeviceSets:
+    - config: {}
+      name: test
+      dataPVCTemplate:
+        metadata: {}
+        spec:
+          storageClassName: <scName>
+          accessModes:
+            - ReadWriteOnce
+          resources:
+            requests:
+              storage: <osdStorage>
+          volumeMode: Block
+      count: 3
+      placement: {}
+      replica: 1
+      deviceClass: ssd
+      resources:
+        requests:
+          cpu: 125m
+          memory: 128Mi
+  encryption:
+    kms: {}
+  mirroring: {}
+  multiCloudGateway:
+    disableLoadBalancerService: true
+  managedResources:
+    cephBlockPools: {}
+    cephFilesystems: {}
+    cephObjectStores: {}
+    cephCluster: {}
+    cephConfig: {}
+    cephDashboard: {}
+    cephObjectStoreUsers: {}
+  arbiter: {}
+  nodeTopologies: {}
+  externalStorage: {}
+  placement:
+    mon: {}
+    mds: {}
+    mgr: {}
+    rbd-mirror: {}
+    rgw: {}
+    nfs: {}
+    noobaa-core: {}
+    noobaa-standalone: {}
+  resources:
+    mon:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    mds:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    mgr:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    mgr-sidecar:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    nfs:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    noobaa-core:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    noobaa-db:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    noobaa-db-vol:
+      requests:
+        storage: 10Gi
+    noobaa-endpoint:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    rbd-mirror:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+    rgw:
+      requests:
+        cpu: 125m
+        memory: 128Mi
+' |
 
 $ scName: echo -n 'gp3-csi lvmcluster' | tr ' ' '\n'
 $ monStorage: echo -n '3Gi 5Gi 10Gi' | tr ' ' '\n'
 $ osdStorage: echo -n '3Gi 5Gi 10Gi' | tr ' ' '\n'
 
-# sample file app
+# file app
 echo '
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: ubi9-fs
+  name: ubi9-fs-<namesuffix>
   namespace: default
   labels:
-    app: ubi9-fs
+    app: ubi9-fs-<namesuffix>
 spec:
   selector:
     matchLabels:
-      app: ubi9-fs
+      app: ubi9-fs-<namesuffix>
   replicas: 1
   template:
     metadata:
       labels:
-        app: ubi9-fs
+        app: ubi9-fs-<namesuffix>
+        group: ubi9-fs
     spec:
       terminationGracePeriodSeconds: 2
       containers:
       - name: ubi9-fs
         image: registry.access.redhat.com/ubi9-micro:9.4
         command: ["/bin/bash", "-c"]
-        args: ["cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /mnt/pv/file && tail -f /dev/null"]
+        args:
+        - |
+          echo Old: ; test -e /mnt/pv/file \&\& head -c 10m /mnt/pv/file | md5sum;
+          cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /mnt/pv/file;
+          echo New: ; test -e /mnt/pv/file \&\& head -c 10m /mnt/pv/file | md5sum;
+          touch /tmp/.done;
+          tail -f /dev/null;
+        startupProbe:
+          exec:
+            command:
+            - ls
+            - /tmp/.done
+          # wait for 5 (poll) * 120 (consecutive failure) = 600s = 10 min
+          periodSeconds: 5
+          failureThreshold: 120
         volumeMounts:
         - name: cephfs
           mountPath: /mnt/pv
@@ -234,35 +358,181 @@ spec:
       resources:
         requests:
           storage: 100Mi
-      storageClassName: ocs-storagecluster-cephfs
-' | 
+      storageClassName: <appScName>
+' |
 
-# sample block app
+# clone file app
 echo '
 ---
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:
-  name: ubi9-bk
+  name: ubi9-fs-clone-<namesuffix>
   namespace: default
   labels:
-    app: ubi9-bk
+    app: ubi9-fs-clone-<namesuffix>
 spec:
   selector:
     matchLabels:
-      app: ubi9-bk
+      app: ubi9-fs-clone-<namesuffix>
   replicas: 1
   template:
     metadata:
       labels:
-        app: ubi9-bk
+        app: ubi9-fs-clone-<namesuffix>
+        group: ubi9-fs
+    spec:
+      terminationGracePeriodSeconds: 2
+      containers:
+      - name: ubi9-fs
+        image: registry.access.redhat.com/ubi9-micro:9.4
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          echo Old: ; test -e /mnt/pv/file \&\& head -c 10m /mnt/pv/file | md5sum;
+          cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /mnt/pv/file;
+          echo New: ; test -e /mnt/pv/file \&\& head -c 10m /mnt/pv/file | md5sum;
+          touch /tmp/.done;
+          tail -f /dev/null;
+        startupProbe:
+          exec:
+            command:
+            - ls
+            - /tmp/.done
+          # wait for 5 (poll) * 120 (consecutive failure) = 600s = 10 min
+          periodSeconds: 5
+          failureThreshold: 120
+        volumeMounts:
+        - name: cephfs-clone-<namesuffix>
+          mountPath: /mnt/pv
+  volumeClaimTemplates:
+  - metadata:
+      name: cephfs-clone-<namesuffix>
+    spec:
+      dataSource:
+        name: cephfs-ubi9-fs-<namesuffix>-0
+        kind: PersistentVolumeClaim
+      accessModes: [ "ReadWriteMany" ]
+      volumeMode: Filesystem
+      resources:
+        requests:
+          storage: 100Mi
+      storageClassName: <appScName>
+' |
+
+# restore file app clone
+echo '
+---
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:
+  name: cephfs-snap-<namesuffix>
+  namespace: default
+  labels:
+    app.temp.io: cephfs-snap
+spec:
+  volumeSnapshotClassName: <appVScName>
+  source:
+    persistentVolumeClaimName: cephfs-clone-<namesuffix>-ubi9-fs-clone-<namesuffix>-0
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ubi9-fs-restore-<namesuffix>
+  namespace: default
+  labels:
+    app: ubi9-fs-restore-<namesuffix>
+spec:
+  selector:
+    matchLabels:
+      app: ubi9-fs-restore-<namesuffix>
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ubi9-fs-restore-<namesuffix>
+        group: ubi9-fs
+    spec:
+      terminationGracePeriodSeconds: 2
+      containers:
+      - name: ubi9-fs
+        image: registry.access.redhat.com/ubi9-micro:9.4
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          echo Old: ; test -e /mnt/pv/file \&\& head -c 10m /mnt/pv/file | md5sum;
+          cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /mnt/pv/file;
+          echo New: ; test -e /mnt/pv/file \&\& head -c 10m /mnt/pv/file | md5sum;
+          touch /tmp/.done;
+          tail -f /dev/null;
+        startupProbe:
+          exec:
+            command:
+            - ls
+            - /tmp/.done
+          # wait for 5 (poll) * 120 (consecutive failure) = 600s = 10 min
+          periodSeconds: 5
+          failureThreshold: 120
+        volumeMounts:
+        - name: cephfs-restore-<namesuffix>
+          mountPath: /mnt/pv
+  volumeClaimTemplates:
+  - metadata:
+      name: cephfs-restore-<namesuffix>
+    spec:
+      dataSource:
+        name: cephfs-snap-<namesuffix>
+        kind: VolumeSnapshot
+        apiGroup: snapshot.storage.k8s.io
+      accessModes: [ "ReadWriteMany" ]
+      volumeMode: Filesystem
+      resources:
+        requests:
+          storage: 100Mi
+      storageClassName: <appScName>
+' |
+
+# block app
+echo '
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ubi9-bk-<namesuffix>
+  namespace: default
+  labels:
+    app: ubi9-bk-<namesuffix>
+spec:
+  selector:
+    matchLabels:
+      app: ubi9-bk-<namesuffix>
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ubi9-bk-<namesuffix>
+        group: ubi9-bk
     spec:
       terminationGracePeriodSeconds: 2
       containers:
       - name: ubi9-bk
         image: registry.access.redhat.com/ubi9-micro:9.4
         command: ["/bin/bash", "-c"]
-        args: ["cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /dev/xvda && tail -f /dev/null"]
+        args:
+        - |
+          echo Old: ; head -c 10m /dev/xvda | md5sum;
+          cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /dev/xvda;
+          echo New: ; head -c 10m /dev/xvda | md5sum;
+          touch /tmp/.done;
+          tail -f /dev/null;
+        startupProbe:
+          exec:
+            command:
+            - ls
+            - /tmp/.done
+          # wait for 5 (poll) * 120 (consecutive failure) = 600s = 10 min
+          periodSeconds: 5
+          failureThreshold: 120
         volumeDevices:
         - name: rbd
           devicePath: /dev/xvda
@@ -275,8 +545,143 @@ spec:
       resources:
         requests:
           storage: 100Mi
-      storageClassName: ocs-storagecluster-ceph-rbd
-' | 
+      storageClassName: <appScName>
+' |
+
+# clone block app
+echo '
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ubi9-bk-clone-<namesuffix>
+  namespace: default
+  labels:
+    app: ubi9-bk-clone-<namesuffix>
+spec:
+  selector:
+    matchLabels:
+      app: ubi9-bk-clone-<namesuffix>
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ubi9-bk-clone-<namesuffix>
+        group: ubi9-bk
+    spec:
+      terminationGracePeriodSeconds: 2
+      containers:
+      - name: ubi9-bk
+        image: registry.access.redhat.com/ubi9-micro:9.4
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          echo Old: ; head -c 10m /dev/xvda | md5sum;
+          cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /dev/xvda;
+          echo New: ; head -c 10m /dev/xvda | md5sum;
+          touch /tmp/.done;
+          tail -f /dev/null;
+        startupProbe:
+          exec:
+            command:
+            - ls
+            - /tmp/.done
+          # wait for 5 (poll) * 120 (consecutive failure) = 600s = 10 min
+          periodSeconds: 5
+          failureThreshold: 120
+        volumeDevices:
+        - name: rbd-clone-<namesuffix>
+          devicePath: /dev/xvda
+  volumeClaimTemplates:
+  - metadata:
+      name: rbd-clone-<namesuffix>
+    spec:
+      dataSource:
+        name: rbd-ubi9-bk-<namesuffix>-0
+        kind: PersistentVolumeClaim
+      accessModes: [ "ReadWriteMany" ]
+      volumeMode: Block
+      resources:
+        requests:
+          storage: 100Mi
+      storageClassName: <appScName>
+' |
+
+# restore block app clone
+echo '
+---
+apiVersion: snapshot.storage.k8s.io/v1
+kind: VolumeSnapshot
+metadata:
+  name: rbd-snap-<namesuffix>
+  namespace: default
+  labels:
+    app.temp.io: rbd-snap
+spec:
+  volumeSnapshotClassName: <appVScName>
+  source:
+    persistentVolumeClaimName: rbd-clone-<namesuffix>-ubi9-bk-clone-<namesuffix>-0
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: ubi9-bk-restore-<namesuffix>
+  namespace: default
+  labels:
+    app: ubi9-bk-restore-<namesuffix>
+spec:
+  selector:
+    matchLabels:
+      app: ubi9-bk-restore-<namesuffix>
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: ubi9-bk-restore-<namesuffix>
+        group: ubi9-bk
+    spec:
+      terminationGracePeriodSeconds: 2
+      containers:
+      - name: ubi9-bk
+        image: registry.access.redhat.com/ubi9-micro:9.4
+        command: ["/bin/bash", "-c"]
+        args:
+        - |
+          echo Old: ; head -c 10m /dev/xvda | md5sum;
+          cat /dev/urandom | tr -dc [:space:][:print:] | head -c 10m > /dev/xvda;
+          echo New: ; head -c 10m /dev/xvda | md5sum;
+          touch /tmp/.done;
+          tail -f /dev/null;
+        startupProbe:
+          exec:
+            command:
+            - ls
+            - /tmp/.done
+          # wait for 5 (poll) * 120 (consecutive failure) = 600s = 10 min
+          periodSeconds: 5
+          failureThreshold: 120
+        volumeDevices:
+        - name: rbd-restore-<namesuffix>
+          devicePath: /dev/xvda
+  volumeClaimTemplates:
+  - metadata:
+      name: rbd-restore-<namesuffix>
+    spec:
+      dataSource:
+        name: rbd-snap-<namesuffix>
+        kind: VolumeSnapshot
+        apiGroup: snapshot.storage.k8s.io
+      accessModes: [ "ReadWriteMany" ]
+      volumeMode: Block
+      resources:
+        requests:
+          storage: 100Mi
+      storageClassName: <appScName>
+' |
+
+$ appScName: echo -n 'ocs-storagecluster-cephfs ocs-storagecluster-ceph-rbd' | tr ' ' '\n'
+
+$ appVScName: echo -n 'ocs-storagecluster-cephfs ocs-storagecluster-ceph-rbd ocs-storagecluster-cephfsplugin-snapclass ocs-storagecluster-rbdplugin-snapclass' | tr ' ' '\n'
 
 # odf-console
 oc patch console.operator cluster -n openshift-storage --type json -p '[{"op": "add", "path": "/spec/plugins", "value": ["odf-console"]}]'

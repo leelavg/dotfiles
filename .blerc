@@ -9,7 +9,6 @@ ble-face menu_filter_input=bold
 ble-face command_directory=fg=blue,underline
 ble-face filename_directory=fg=blue,underline
 
-
 bleopt filename_ls_colors="$LS_COLORS"
 bleopt prompt_eol_mark=''
 bleopt exec_errexit_mark=
@@ -21,4 +20,4 @@ bleopt edit_marker_error=
 bleopt history_erasedups_limit=
 bleopt complete_menu_color=
 
-
+ble-bind -f 'M-m' 'accept-line'
