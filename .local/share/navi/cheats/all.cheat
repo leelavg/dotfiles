@@ -689,3 +689,47 @@ oc patch console.operator cluster -n openshift-storage --type json -p '[{"op": "
 # client-console
 oc patch console.operator cluster -n openshift-storage --type json -p '[{"op": "add", "path": "/spec/plugins", "value": ["odf-client-console"]}]'
 
+% yakko
+
+# lvms sub
+echo '
+---
+kind: Namespace
+---
+apiVersion: operators.coreos.com/v1
+  name: operator-lvms
+  namespace: openshift-lvms
+spec:
+  targetNamespaces:
+  - openshift-lvms
+---
+apiVersion: operators.coreos.com/v1alpha1
+kind: Subscription
+metadata:
+  name: lvms
+  namespace: openshift-lvms
+spec:
+  channel: <channel>
+  installPlanApproval: Automatic
+  name: lvms-operator
+  source: redhat-operators
+  sourceNamespace: openshift-marketplace
+' |
+
+# lvms cluster
+echo '
+apiVersion: lvm.topolvm.io/v1alpha1
+kind: LVMCluster
+metadata:
+  name: lvms-cluster
+  namespace: openshift-lvms
+spec:
+  storage:
+    deviceClasses:
+      - name: vg
+        default: true
+        thinPoolConfig:
+          name: tp
+          overprovisionRatio: 10
+          sizePercent: 90
+' |

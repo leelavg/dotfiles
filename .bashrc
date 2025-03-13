@@ -24,6 +24,28 @@ function ol() {
   KUBECONFIG=${path} oc login -u kubeadmin --insecure-skip-tls-verify=true -s ${api} -p $2
 }
 
+function inw() {
+  declare -A lines
+  local num=0
+  while read -r; do
+    local key=$(awk '{printf $1}' <<<"$REPLY")
+    test x$key = x && continue # skip empty lines
+    local val=${lines[$key]:-''}
+    if test x$val = x; then
+      # new line
+      printf "%2s %s\n" "$num" "$REPLY" # just print, we are always in correct position for new entry
+      lines[$key]=$((num++))
+    else
+      # old line
+      echo -en "\033[$((num - val))A" # go up to the line identified by current key/name
+      echo -en "\033[0K" # clear line from start to end
+      printf "%2s %s\n" "$val" "$REPLY" # output the updated info
+      echo -en "\033[$((num - val))B" # go down to where we came from
+    fi
+    sleep .1
+  done
+}
+
 #====== Shell Options
 
 shopt -s histappend
@@ -105,6 +127,7 @@ alias dp='docker ps -a'
 alias dre='docker rm $(docker ps -a -q)'
 alias drd='docker rmi $(docker images -f "dangling=true" -q) && docker volume rm $(docker volume ls -qf dangling=true)'
 alias did='docker images --format "{{.Repository}}:{{.Tag}}" | fzf --print0 -m | xargs -0 -t -r docker rmi'
+alias pd='podman rmi $(podman images -f "dangling=true" -q) && podman volume rm $(podman volume ls -qf dangling=true)'
 
 alias p='podman'
 alias b='buildah'
@@ -112,7 +135,12 @@ alias b='buildah'
 #====== For packages
 
 [ -d /usr/share/fzf/shell ] && source /usr/share/fzf/shell/key-bindings.$(basename $SHELL)
-command -v starship >/dev/null && eval "$(starship init bash)"
+if [ -n "${ASCIINEMA_REC}" ]; then
+  export PROMPT_DIRTRIM=1
+  PS1='~ \$ '
+else
+  command -v starship >/dev/null && eval "$(starship init bash)"
+fi
 command -v vfox >/dev/null && eval "$(vfox activate bash)"
 command -v zoxide >/dev/null && eval "$(zoxide init bash)"
 command -v virtualenvwrapper_lazy.sh >/dev/null && source $(command -v virtualenvwrapper_lazy.sh)
