@@ -113,6 +113,7 @@ alias cfg='git --git-dir=$HOME/.dot/ --work-tree=$HOME'
 
 #===== Orchestration
 alias k='kubectl'
+alias kb='kubie'
 alias kx='kubie ctx'
 alias kn='kubie ns'
 alias sp='shipyard'

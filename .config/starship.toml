@@ -30,9 +30,9 @@ style = 'bright-blue'
 symbol = '↓'
 # exit in current shell with symbol closes the window or drop out of ssh/tmux
 command = '''
-declare -i lvl=$((SHLVL-2));
+declare -i lvl=$((SHLVL-1));
 test x${TERM_PROGRAM} = xtmux && ((lvl -= 1));
-test x${SSH_TTY} != x && ((lvl += 1));
+test ! x${ET_VERSION} = x && ((lvl -= 1));
 test $lvl -gt 0 && echo $lvl;
 '''
 format = '[($symbol$output )]($style)'

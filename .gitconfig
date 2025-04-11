@@ -90,3 +90,6 @@
 
 [rebase]
 	updateRefs = true
+
+[include]
+	path = ~/.config/delta.gitconfig
