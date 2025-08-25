@@ -1,29 +1,25 @@
 [[language]]
 name = "python"
-language-servers = [ "pylsp" ]
+language-servers = ["ty", "ruff"]
+# language-servers = ["basedpyright"]
 auto-format = true
 
-[language-server.pylsp]
-command = "pylsp-hx"
+[language-server.basedpyright]
+command = "basedpyright-langserver"
+args = ["--stdio"]
 
-[language-server.pylsp.config.pylsp.plugins]
-autopep8.enabled = false
-flake8.enabled = false
-jedi_symbols.include_import_symbols = true
-jedi_completion.enabled = true
-mccabe.enabled = false
-preload.enabled = false
-pycodestyle.enabled = false
-pyflakes.enabled = false
-pylint.enabled = false
-rope_autoimport.enabled = false
-rope_autoimport.completions.enabled= false
-rope_autoimport.code_actions.enabled= false
-rope_completion.enabled = false
-yapf.enabled = false
+[language-server.basedpyright.config]
+basedpyright.analysis.diagnosticMode = "openFilesOnly"
 
-[language-server.pylsp.config.ruff]
-plugins.pyls_ruff.enabled = true
+[language-server.ty]
+command = "ty"
+args = ["server"]
+config = { experimental = { rename = true } }
+
+[language-server.ruff]
+command = "ruff"
+args = ["server"]
+config = { configurationPreference = "filesystemFirst" }
 
 [[language]]
 name = "html"
