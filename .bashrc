@@ -92,7 +92,7 @@ alias g='git'
 
 alias gs='git s'
 alias gl='git lg'
-alias gh='git hist'
+alias ghi='git hist'
 alias ga='git add'
 alias gb='git branch'
 alias gd='git diff'
