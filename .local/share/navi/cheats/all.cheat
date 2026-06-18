@@ -18,6 +18,9 @@ spec:
 # odf icsp
 oc debug -n default -q $(oc get no -oname | head -n1) -- chroot /host sh -c 'podman run --rm --entrypoint cat quay.io/rhceph-dev/ocs-registry:<tag> /icsp.yaml' |
 
+# schedule on all nodes
+oc patch schedulers cluster -p '{"spec": {"mastersSchedulable": true}}' --type merge
+
 # label all nodes
 oc label $(oc get no -oname) cluster.ocs.openshift.io/openshift-storage=''
 
@@ -190,7 +193,7 @@ spec:
         memory: 128Mi
 ' |
 
-# internal/converge sno storagecluster
+# internal sno storagecluster
 echo '
 ---
 apiVersion: ocs.openshift.io/v1

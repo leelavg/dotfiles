@@ -79,7 +79,7 @@
 	als = "!git config --list | grep 'alias\\.' | sed 's/alias\\.\\([^=]*\\)=\\(.*\\)/\\1\\ \t => \\2/' | sort"
 	lg = log --graph --pretty=format:'%Cred%h%Creset - %Cgreen(%cr) %C(yellow)%d%Creset %C(cyan)%s%Creset %C(bold blue)<%an>%Creset' --abbrev-commit --date=relative
 	hist = log --pretty=format:'%Cred%h%Creset - %Cgreen%ad%Creset | %C(cyan)%s%d%Creset %C(bold blue)[%an]%Creset' --graph --date=short
-	pr = "!f() { git fetch ${2:-origin} pull/$1/head:pr$1; git checkout pr$1; }; f"
+	pr = "!f() { git fetch ${2:-origin} pull/$1/head:pr$1 --depth ${3:-1}; git checkout pr$1; }; f"
 	fpush = "push --force-with-lease"
 
 [init]
@@ -93,3 +93,8 @@
 
 [include]
 	path = ~/.config/delta.gitconfig
+[commit]
+	gpgsign = true
+
+[core]
+	 excludesfile = ~/.gitignore_global

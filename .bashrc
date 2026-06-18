@@ -132,7 +132,6 @@ alias did='docker images --format "{{.Repository}}:{{.Tag}}" | fzf --print0 -m |
 alias pd='podman rmi $(podman images -f "dangling=true" -q) && podman volume rm $(podman volume ls -qf dangling=true)'
 
 alias p='podman'
-alias b='buildah'
 
 #====== For packages
 
