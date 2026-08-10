@@ -1,0 +1,122 @@
+# gruvbox
+foreground: &foreground "#d4be98"
+background: &background "#282828"
+whitish: &whitish "#ebdbb2"
+selection_bg: &selection_bg "#d8a657"
+selection_fg: &selection_fg "#282828"
+boxes: &boxes "#7c6f64"
+cyan: &cyan "#89b482"
+green: &green "#a9b665"
+orange: &orange "#e78a4e"
+magenta: &magenta "#d3869b"
+blue: &blue "#458588"
+red: &red "#ea6962"
+
+k9s:
+  body:
+    fgColor: *foreground
+    bgColor: *background
+    logoColor: *blue
+  prompt:
+    fgColor: *foreground
+    bgColor: *background
+    suggestColor: *orange
+    border:
+      commandColor: *blue
+      defaultColor: *blue
+  info:
+    fgColor: *foreground
+    sectionColor: *foreground
+    cpuColor: *green
+    memColor: *orange
+    k9sRevColor: *blue
+  help:
+    fgColor: *foreground
+    bgColor: *background
+    sectionColor: *foreground
+    keyColor: *magenta
+    numKeyColor: *blue
+  dialog:
+    fgColor: *foreground
+    bgColor: *background
+    buttonFgColor: *foreground
+    buttonBgColor: *magenta
+    buttonFocusFgColor: *selection_fg
+    buttonFocusBgColor: *selection_bg
+    labelFgColor: *orange
+    fieldFgColor: *foreground
+    buttonFocusLabelFgColor: *selection_fg
+  frame:
+    border:
+      fgColor: *boxes
+      focusColor: *blue
+    menu:
+      fgColor: *foreground
+      keyColor: *magenta
+      numKeyColor: *magenta
+      fgStyle: bold
+    crumbs:
+      fgColor: *foreground
+      bgColor: *boxes
+      activeColor: *blue
+    status:
+      newColor: *cyan
+      modifyColor: *blue
+      addColor: *green
+      pendingColor: *orange
+      errorColor: *red
+      highlightColor: *orange
+      killColor: *red
+      completedColor: *green
+    title:
+      fgColor: *foreground
+      bgColor: *background
+      highlightColor: *orange
+      counterColor: *blue
+      filterColor: *magenta
+  views:
+    table:
+      fgColor: *foreground
+      bgColor: *background
+      cursorFgColor: *selection_fg
+      cursorBgColor: *selection_bg
+      markColor: *blue
+      header:
+        fgColor: *foreground
+        bgColor: *background
+        sorterColor: *boxes
+        selectedSortColumnColor: *blue
+    xray:
+      fgColor: *foreground
+      bgColor: *background
+      cursorColor: *selection_bg
+      cursorTextColor: *selection_fg
+      graphicColor: *blue
+    charts:
+      bgColor: *background
+      dialBgColor: *boxes
+      chartBgColor: *boxes
+      defaultDialColors:
+        - *blue
+        - *red
+      defaultChartColors:
+        - *green
+        - *orange
+      focusFgColor: *foreground
+      focusBgColor: *selection_bg
+    yaml:
+      keyColor: *magenta
+      valueColor: *foreground
+      colonColor: *blue
+    picker:
+      mainColor: *blue
+      focusColor: *selection_bg
+      shortcutColor: *orange
+    logs:
+      fgColor: *whitish
+      bgColor: *background
+      indicator:
+        fgColor: *whitish
+        bgColor: *background
+        toggleOnColor: *green
+        toggleOffColor: *red
